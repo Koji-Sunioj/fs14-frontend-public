@@ -1,21 +1,16 @@
-import { useDispatch, useSelector } from 'react-redux'
+import AppRoutes from './Routes'
+import Container from 'react-bootstrap/Container'
 
-import { decrement, increment } from './features/counter/counterSlice'
-import { RootState } from './store'
+import NavBar from './components/NavBar'
 
 function App() {
-  const count = useSelector((state: RootState) => state.counter.value)
-  const dispatch = useDispatch()
-
   return (
-    <div>
-      <h1>Vite + React + Tailwind</h1>
-      <div>
-        <button onClick={() => dispatch(increment())}>Increment</button>
-        <span>{count}</span>
-        <button onClick={() => dispatch(decrement())}>Decrement</button>
-      </div>
-    </div>
+    <>
+      <NavBar />
+      <Container>
+        <AppRoutes />
+      </Container>
+    </>
   )
 }
 
