@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import './App.css'
 import { decrement, increment } from './features/counter/counterSlice'
 import { RootState } from './store'
 
@@ -9,11 +8,11 @@ function App() {
   const dispatch = useDispatch()
 
   return (
-    <div className="App">
-      <h1>Vite + React + Toolkit + Tailwind</h1>
-      <div className="card">
+    <div>
+      <h1>Vite + React + Tailwind</h1>
+      <div>
         <button onClick={() => dispatch(increment())}>Increment</button>
-        <span className="px-10">{count}</span>
+        <span>{count}</span>
         <button onClick={() => dispatch(decrement())}>Decrement</button>
       </div>
     </div>
