@@ -17,6 +17,7 @@ export type AlbumStatetype = {
   error: boolean
   loading: boolean
   message: null | string
+  pages: null | number
 }
 
 export type AppState = {
@@ -28,4 +29,5 @@ export type FilterStateType = {
   sortField: string
   direction: string
   query: null | string
+  page: number
 }

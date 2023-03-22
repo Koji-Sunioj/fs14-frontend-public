@@ -1,7 +1,7 @@
 import AppRoutes from './Routes'
-import Container from 'react-bootstrap/Container'
-
 import NavBar from './components/NavBar'
+
+import Container from 'react-bootstrap/Container'
 
 const App = () => (
   <>

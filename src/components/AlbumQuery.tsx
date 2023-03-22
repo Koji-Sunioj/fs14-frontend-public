@@ -3,15 +3,24 @@ import Row from 'react-bootstrap/esm/Row'
 import Col from 'react-bootstrap/esm/Col'
 import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
+
 import { FilterStateType } from '../types/types'
 
 type AlbumQueryType = {
   filter: FilterStateType
   changeSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void
   createQuery: (event: React.FormEvent<HTMLFormElement>) => void
+  buttonRef: React.RefObject<HTMLButtonElement>
+  searchDisable: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const AlbumQuery = ({ filter, changeSelect, createQuery }: AlbumQueryType) => {
+const AlbumQuery = ({
+  filter,
+  buttonRef,
+  createQuery,
+  changeSelect,
+  searchDisable
+}: AlbumQueryType) => {
   const { sortField, direction, query } = filter
 
   return (
@@ -41,8 +50,10 @@ const AlbumQuery = ({ filter, changeSelect, createQuery }: AlbumQueryType) => {
         <Form onSubmit={createQuery}>
           <Form.Label>Search</Form.Label>
           <InputGroup>
-            <Button variant="primary">Search</Button>
-            <Form.Control name="query" type="text" defaultValue={query!} />
+            <Button variant="primary" ref={buttonRef} disabled={query === null}>
+              Search
+            </Button>
+            <Form.Control name="query" type="text" defaultValue={query!} onInput={searchDisable} />
           </InputGroup>
         </Form>
       </Col>

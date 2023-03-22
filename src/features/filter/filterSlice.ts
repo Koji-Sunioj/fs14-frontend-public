@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { FilterStateType } from '../../types/types'
 
 export const initialFilterState: FilterStateType = {
-  //   page: 1,
+  page: 1,
   direction: 'ascending',
   sortField: 'artistName',
   query: null
