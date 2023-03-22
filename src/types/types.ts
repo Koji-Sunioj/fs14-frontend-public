@@ -21,4 +21,11 @@ export type AlbumStatetype = {
 
 export type AppState = {
   albums: AlbumStatetype
+  filter: FilterStateType
+}
+
+export type FilterStateType = {
+  sortField: string
+  direction: string
+  query: null | string
 }

@@ -2,19 +2,24 @@ import { useEffect } from 'react'
 import Row from 'react-bootstrap/Row'
 import Alert from 'react-bootstrap/Alert'
 import { useSelector, useDispatch } from 'react-redux'
-import { AppState, AppDispatch } from '../types/types'
+import { AppState, AppDispatch, FilterStateType } from '../types/types'
+import { setFilter } from '../features/filter/filterSlice'
 import { fetchAlbums } from '../features/albums/albumSlice'
 
 import AlbumCard from '../components/AlbumCard'
+import AlbumQuery from '../components/AlbumQuery'
 import AlbumSkeleton from '../components/AlbumSkeleton'
 
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { data, loading, error, message } = useSelector((state: AppState) => state.albums)
+  const {
+    albums: { data, loading, error, message },
+    filter
+  } = useSelector((state: AppState) => state)
   const shouldFetch = data === null && !error && !loading
 
   useEffect(() => {
-    shouldFetch && dispatch(fetchAlbums())
+    shouldFetch && dispatch(fetchAlbums(filter))
   })
 
   const rowMappings = []
@@ -24,9 +29,37 @@ const HomePage = () => {
     }
   }
 
+  const mutateFilter = (newParams: FilterStateType) => {
+    dispatch(setFilter(newParams))
+    dispatch(fetchAlbums(newParams))
+  }
+
+  const changeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const {
+      target: { name, value }
+    } = event
+    const sortObject: { [index: string]: string } = {}
+    sortObject[name] = value
+    const mutatedFilter = Object.assign({ ...filter }, sortObject)
+    mutateFilter(mutatedFilter)
+  }
+
+  const createQuery = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const {
+      currentTarget: {
+        query: { value: query }
+      }
+    } = event
+    if (query.length > 0) {
+      const newQuery = { query: query }
+      const mutatedFilter = Object.assign({ ...filter }, newQuery)
+      mutateFilter(mutatedFilter)
+    }
+  }
   return (
     <>
-      <h1>Welcome to the record shop</h1>
+      <AlbumQuery filter={filter} changeSelect={changeSelect} createQuery={createQuery} />
       {data !== null &&
         rowMappings.map((rowNumber) => {
           const albumRow = data.slice(rowNumber, rowNumber + 3)
