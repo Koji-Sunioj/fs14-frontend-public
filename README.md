@@ -1,3 +1,7 @@
+# From Koji
+
+current netlify link: https://darling-syrniki-58d723.netlify.app/
+
 # Frontend project
 
 ## Expectation
