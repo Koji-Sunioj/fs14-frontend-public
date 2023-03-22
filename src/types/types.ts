@@ -3,7 +3,7 @@ import { store } from '../store'
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
-export type AlbumType = {
+export type TAlbum = {
   albumId: string
   albumName: string
   artistName: string
@@ -12,22 +12,41 @@ export type AlbumType = {
   tags: string[]
 }
 
-export type AlbumStatetype = {
-  data: null | AlbumType[]
+export type TAlbumsState = {
+  data: null | TAlbum[]
   error: boolean
   loading: boolean
   message: null | string
   pages: null | number
 }
 
-export type AppState = {
-  albums: AlbumStatetype
-  filter: FilterStateType
+export type TAppState = {
+  albums: TAlbumsState
+  filter: TFilterState
 }
 
-export type FilterStateType = {
+export type TFilterState = {
   sortField: string
   direction: string
   query: null | string
   page: number
+}
+
+export type TAlbumPagination = {
+  pages: number
+  filter: TFilterState
+  changePage: (page: number) => void
+}
+
+export type TAlbumQuery = {
+  filter: TFilterState
+  buttonRef: React.RefObject<HTMLButtonElement>
+  createQuery: (event: React.FormEvent<HTMLFormElement>) => void
+  changeSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  searchDisable: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export type TAlbumRows = {
+  data: TAlbum[] | number[]
+  type: string
 }

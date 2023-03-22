@@ -1,18 +1,10 @@
+import { TAlbumQuery } from '../types/types'
+
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/esm/Row'
 import Col from 'react-bootstrap/esm/Col'
 import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
-
-import { FilterStateType } from '../types/types'
-
-type AlbumQueryType = {
-  filter: FilterStateType
-  changeSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void
-  createQuery: (event: React.FormEvent<HTMLFormElement>) => void
-  buttonRef: React.RefObject<HTMLButtonElement>
-  searchDisable: (event: React.ChangeEvent<HTMLInputElement>) => void
-}
 
 const AlbumQuery = ({
   filter,
@@ -20,7 +12,7 @@ const AlbumQuery = ({
   createQuery,
   changeSelect,
   searchDisable
-}: AlbumQueryType) => {
+}: TAlbumQuery) => {
   const { sortField, direction, query } = filter
 
   return (

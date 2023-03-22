@@ -1,10 +1,10 @@
+import { TAlbum } from '../types/types'
+
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-import { AlbumType } from '../types/types'
-
-const AlbumCard = ({ album }: { album: AlbumType }) => {
+const AlbumCard = ({ album }: { album: TAlbum }) => {
   const { albumName, artistName, stock, price, tags } = album
 
   return (

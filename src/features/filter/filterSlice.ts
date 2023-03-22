@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { TFilterState } from '../../types/types'
 
-import { FilterStateType } from '../../types/types'
-
-export const initialFilterState: FilterStateType = {
+export const initialFilterState: TFilterState = {
   page: 1,
   direction: 'ascending',
   sortField: 'artistName',

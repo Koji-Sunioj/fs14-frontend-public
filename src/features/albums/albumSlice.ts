@@ -1,7 +1,8 @@
+import { applyFilter } from '../../utils/applyFilter'
+import { TAlbumsState, TFilterState } from '../../types/types'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { AlbumStatetype, FilterStateType, AlbumType } from '../../types/types'
 
-export const fetchAlbums = createAsyncThunk('fetch-albums', async (filter: FilterStateType) => {
+export const fetchAlbums = createAsyncThunk('fetch-albums', async (filter: TFilterState) => {
   const request = await fetch('albums.json')
   if (!request.ok) {
     const { message } = await request.json()
@@ -11,7 +12,7 @@ export const fetchAlbums = createAsyncThunk('fetch-albums', async (filter: Filte
   return { filter, albums }
 })
 
-const initialAlbumsState: AlbumStatetype = {
+const initialAlbumsState: TAlbumsState = {
   data: null,
   loading: false,
   error: false,
@@ -32,29 +33,11 @@ export const albumSlice = createSlice({
         state.error = false
       })
       .addCase(fetchAlbums.fulfilled, (state, action) => {
-        let {
-          filter: { direction, sortField, query, page },
-          albums
-        } = action.payload
-
-        if (query !== null) {
-          albums = albums.filter(
-            (album: AlbumType) =>
-              album.albumName.toLowerCase().includes(query!) ||
-              album.artistName.toLowerCase().includes(query!) ||
-              album.tags.join(' ').toLowerCase().includes(query!)
-          )
-        }
-        const key = sortField as keyof AlbumType
-        const next = direction === 'ascending' ? 1 : -1
-        const prev = next === 1 ? -1 : 1
-        albums.sort((a: AlbumType, b: AlbumType) =>
-          a[key] > b[key] ? next : b[key!] > a[key] ? prev : 0
-        )
-
-        state.data = albums.slice(page * 6 - 6, page * 6)
+        const { filter, albums } = action.payload
+        const { filteredAlbums, pages } = applyFilter(filter, albums)
+        state.data = filteredAlbums
         state.loading = false
-        state.pages = Math.ceil(albums.length / 6)
+        state.pages = pages
       })
       .addCase(fetchAlbums.rejected, (state, action) => {
         state.loading = false
