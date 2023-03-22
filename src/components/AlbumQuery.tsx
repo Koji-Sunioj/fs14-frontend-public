@@ -50,7 +50,7 @@ const AlbumQuery = ({
         <Form onSubmit={createQuery}>
           <Form.Label>Search</Form.Label>
           <InputGroup>
-            <Button variant="primary" ref={buttonRef} disabled={query === null}>
+            <Button variant="primary" ref={buttonRef} disabled={query === null} type="submit">
               Search
             </Button>
             <Form.Control name="query" type="text" defaultValue={query!} onInput={searchDisable} />
