@@ -39,6 +39,7 @@ export type TAlbumPagination = {
 }
 
 export type TAlbumQuery = {
+  loading: boolean
   filter: TFilterState
   buttonRef: React.RefObject<HTMLButtonElement>
   createQuery: (event: React.FormEvent<HTMLFormElement>) => void
@@ -49,4 +50,12 @@ export type TAlbumQuery = {
 export type TAlbumRows = {
   data: TAlbum[] | number[]
   type: string
+  query?: null | string
+  tagToQuery?: (tag: string) => void
+}
+
+export type TAlbumCard = {
+  album: TAlbum
+  query: null | string
+  tagToQuery: (tag: string) => void
 }

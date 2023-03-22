@@ -1,10 +1,10 @@
-import { TAlbum } from '../types/types'
+import { TAlbumCard } from '../types/types'
 
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-const AlbumCard = ({ album }: { album: TAlbum }) => {
+const AlbumCard = ({ album, tagToQuery, query }: TAlbumCard) => {
   const { albumName, artistName, stock, price, tags } = album
 
   return (
@@ -18,7 +18,14 @@ const AlbumCard = ({ album }: { album: TAlbum }) => {
           <Card.Text className="card-p">price: {price}</Card.Text>
           <Card.Text>
             {tags.map((tag) => (
-              <Button variant="info" style={{ margin: '2px' }} key={tag}>
+              <Button
+                disabled={tag.toLowerCase() === query}
+                variant="info"
+                style={{ margin: '2px' }}
+                key={tag}
+                onClick={() => {
+                  tagToQuery(tag)
+                }}>
                 {tag}
               </Button>
             ))}

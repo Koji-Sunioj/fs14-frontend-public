@@ -69,18 +69,27 @@ const HomePage = () => {
     emptyInput && mutateFilter(initialFilterState)
   }
 
+  const tagToQuery = (tag: string) => {
+    const newQuery = { query: tag.toLowerCase(), page: 1 }
+    const mutatedFilter = Object.assign({ ...filter }, newQuery)
+    mutateFilter(mutatedFilter)
+  }
+
   const shouldLoad = data === null && loading
 
   return (
     <>
       <AlbumQuery
+        loading={loading}
         filter={filter}
         buttonRef={buttonRef}
         createQuery={createQuery}
         changeSelect={changeSelect}
         searchDisable={searchDisable}
       />
-      {data !== null && <AlbumRows data={data} type={'real'} />}
+      {data !== null && (
+        <AlbumRows data={data} type={'real'} tagToQuery={tagToQuery} query={filter.query} />
+      )}
       {shouldLoad && <AlbumRows data={[0, 1, 2, 3, 4, 5]} type={'fake'} />}
       {pages !== null && <AlbumPagination pages={pages} filter={filter} changePage={changePage} />}
       {error && <Alert variant="danger">{message}</Alert>}
