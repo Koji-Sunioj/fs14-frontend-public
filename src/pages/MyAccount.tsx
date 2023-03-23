@@ -27,7 +27,6 @@ const MyAccount = () => {
         Hello {givenName} {familyName}
       </h2>
       {shouldRender && <h3>Your orders</h3>}
-
       {shouldRender && (
         <Row>
           {orders?.map((order) => (

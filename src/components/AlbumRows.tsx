@@ -6,36 +6,24 @@ import AlbumCard from './AlbumCard'
 import AlbumSkeleton from './AlbumSkeleton'
 
 const AlbumRows = ({ data, type, tagToQuery }: TAlbumRows) => {
-  const rowMappings = []
-
-  for (let i = 0; i < data.length; i += 3) {
-    rowMappings.push(i)
-  }
-
   return (
     <>
-      {type === 'real' &&
-        rowMappings.map((rowNumber) => {
-          const albumRow = data.slice(rowNumber, rowNumber + 3)
-          return (
-            <Row key={rowNumber}>
-              {albumRow.map((item) => {
-                const album = item as TAlbum
-                return <AlbumCard album={album} key={album.albumId} tagToQuery={tagToQuery!} />
-              })}
-            </Row>
-          )
-        })}
-      {type === 'fake' &&
-        rowMappings.map((rowNumber) => {
-          return (
-            <Row key={rowNumber}>
-              {[0, 1, 2].map((fakeCol) => (
-                <AlbumSkeleton key={fakeCol} />
-              ))}
-            </Row>
-          )
-        })}
+      {type === 'real' && (
+        <Row>
+          {data.map((item) => {
+            const album = item as TAlbum
+            return <AlbumCard album={album} key={album.albumId} tagToQuery={tagToQuery!} />
+          })}
+        </Row>
+      )}
+      {type === 'fake' && (
+        <Row>
+          {data.map((item) => {
+            const fakeCol = item as number
+            return <AlbumSkeleton key={fakeCol} />
+          })}
+        </Row>
+      )}
     </>
   )
 }
