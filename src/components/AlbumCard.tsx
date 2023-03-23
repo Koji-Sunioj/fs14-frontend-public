@@ -1,10 +1,15 @@
-import { TAlbumCard } from '../types/types'
+import { useSelector } from 'react-redux'
+import { TAlbumCard, TAppState } from '../types/types'
 
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-const AlbumCard = ({ album, tagToQuery, query }: TAlbumCard) => {
+const AlbumCard = ({ album, tagToQuery }: TAlbumCard) => {
+  const {
+    filter: { query },
+    user: { email }
+  } = useSelector((state: TAppState) => state)
   const { albumName, artistName, stock, price, tags } = album
 
   return (
@@ -30,7 +35,9 @@ const AlbumCard = ({ album, tagToQuery, query }: TAlbumCard) => {
               </Button>
             ))}
           </Card.Text>
-          <Button variant="primary">Buy</Button>
+          <Button variant="primary" disabled={email === null}>
+            Buy
+          </Button>
         </Card.Body>
       </Card>
     </Col>

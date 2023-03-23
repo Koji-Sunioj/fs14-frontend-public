@@ -12,12 +12,29 @@ export type TAlbum = {
   tags: string[]
 }
 
+export type TPurchase = Omit<TAlbum, 'tags' | 'stock' | 'price'> & {
+  cost: number
+  quantity: number
+}
+
+export type TOrder = {
+  orderId: string
+  user: string
+  purchaseDate: string
+  albums: TPurchase[]
+}
+
 export type TUser = {
+  loading: boolean
+  error: boolean
+  message: null | string
   email: null | string
   expires: null | number
   familyName: null | string
   givenName: null | string
   picture: null | string
+  role: null | string
+  orders: null | TOrder[]
 }
 
 export type TAlbumsState = {
@@ -59,12 +76,10 @@ export type TAlbumQuery = {
 export type TAlbumRows = {
   data: TAlbum[] | number[]
   type: string
-  query?: null | string
   tagToQuery?: (tag: string) => void
 }
 
 export type TAlbumCard = {
   album: TAlbum
-  query: null | string
   tagToQuery: (tag: string) => void
 }

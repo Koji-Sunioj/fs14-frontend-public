@@ -4,12 +4,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 export const fetchAlbums = createAsyncThunk('fetch-albums', async (filter: TFilterState) => {
   const request = await fetch('albums.json')
+  const response = await request.json()
   if (!request.ok) {
-    const { message } = await request.json()
+    const { message } = response
     throw new Error(message)
   }
-  const albums = await request.json()
-  return { filter, albums }
+
+  return { filter, albums: response }
 })
 
 const initialAlbumsState: TAlbumsState = {

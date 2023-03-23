@@ -77,6 +77,8 @@ const HomePage = () => {
 
   const shouldLoad = data === null && loading
 
+  console.log('rendered')
+
   return (
     <>
       <AlbumQuery
@@ -87,9 +89,7 @@ const HomePage = () => {
         changeSelect={changeSelect}
         searchDisable={searchDisable}
       />
-      {data !== null && (
-        <AlbumRows data={data} type={'real'} tagToQuery={tagToQuery} query={filter.query} />
-      )}
+      {data !== null && <AlbumRows data={data} type={'real'} tagToQuery={tagToQuery} />}
       {shouldLoad && <AlbumRows data={[0, 1, 2, 3, 4, 5]} type={'fake'} />}
       {pages !== null && <AlbumPagination pages={pages} filter={filter} changePage={changePage} />}
       {error && <Alert variant="danger">{message}</Alert>}

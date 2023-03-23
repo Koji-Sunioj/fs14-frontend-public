@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row'
 import AlbumCard from './AlbumCard'
 import AlbumSkeleton from './AlbumSkeleton'
 
-const AlbumRows = ({ data, type, tagToQuery, query }: TAlbumRows) => {
+const AlbumRows = ({ data, type, tagToQuery }: TAlbumRows) => {
   const rowMappings = []
 
   for (let i = 0; i < data.length; i += 3) {
@@ -21,14 +21,7 @@ const AlbumRows = ({ data, type, tagToQuery, query }: TAlbumRows) => {
             <Row key={rowNumber}>
               {albumRow.map((item) => {
                 const album = item as TAlbum
-                return (
-                  <AlbumCard
-                    query={query!}
-                    album={album}
-                    key={album.albumId}
-                    tagToQuery={tagToQuery!}
-                  />
-                )
+                return <AlbumCard album={album} key={album.albumId} tagToQuery={tagToQuery!} />
               })}
             </Row>
           )
