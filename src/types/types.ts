@@ -12,6 +12,14 @@ export type TAlbum = {
   tags: string[]
 }
 
+export type TUser = {
+  email: null | string
+  expires: null | number
+  familyName: null | string
+  givenName: null | string
+  picture: null | string
+}
+
 export type TAlbumsState = {
   data: null | TAlbum[]
   error: boolean
@@ -23,6 +31,7 @@ export type TAlbumsState = {
 export type TAppState = {
   albums: TAlbumsState
   filter: TFilterState
+  user: TUser
 }
 
 export type TFilterState = {
