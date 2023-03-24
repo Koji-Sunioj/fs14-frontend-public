@@ -25,7 +25,12 @@ export const albumSlice = createSlice({
   name: 'albums',
   initialState: initialAlbumsState,
   reducers: {
-    resetAlbums: () => initialAlbumsState
+    resetAlbums: () => initialAlbumsState,
+    decrementStock: (state, action) => {
+      const { albumId } = action.payload
+      const index = state.data!.findIndex((album) => album.albumId === albumId)
+      state.data![index].stock--
+    }
   },
   extraReducers(builder) {
     builder
@@ -48,5 +53,5 @@ export const albumSlice = createSlice({
   }
 })
 
-export const { resetAlbums } = albumSlice.actions
+export const { resetAlbums, decrementStock } = albumSlice.actions
 export default albumSlice.reducer

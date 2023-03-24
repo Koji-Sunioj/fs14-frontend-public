@@ -84,8 +84,8 @@ const HomePage = () => {
   return (
     <>
       <AlbumQuery
-        loading={loading}
         filter={filter}
+        loading={loading}
         buttonRef={buttonRef}
         createQuery={createQuery}
         changeSelect={changeSelect}

@@ -8,6 +8,7 @@ export type TAppState = {
   filter: TFilterState
   user: TUserState
   orders: TOrdersState
+  cart: { purchases: TPurchase[] }
 }
 
 export type TAlbumsState = {

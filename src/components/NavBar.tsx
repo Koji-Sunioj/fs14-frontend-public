@@ -12,7 +12,10 @@ import Navbar from 'react-bootstrap/Navbar'
 import Container from 'react-bootstrap/Container'
 
 const NavBar = () => {
-  const { email, expires } = useSelector((state: TAppState) => state.user)
+  const {
+    user: { email, expires },
+    cart: { purchases }
+  } = useSelector((state: TAppState) => state)
   const dispatch = useDispatch<AppDispatch>()
 
   const responseMessage = (response: CredentialResponse) => {
@@ -25,8 +28,8 @@ const NavBar = () => {
   }
 
   const validUser = email !== null && expires !== null && expires! > Math.floor(Date.now() / 1000)
-
-  console.log(validUser)
+  const cartTicks =
+    purchases.length > 0 ? purchases.reduce((sum, purchase) => sum + purchase.quantity, 0) : 0
 
   return (
     <Navbar expand="lg" variant="dark" bg="dark">
@@ -39,7 +42,7 @@ const NavBar = () => {
           <Nav className="me-auto">
             {validUser && (
               <Nav.Link as={Link} to="/my-account">
-                My account
+                My account{cartTicks > 0 && <Badge bg="danger">{cartTicks}</Badge>}
               </Nav.Link>
             )}
           </Nav>
