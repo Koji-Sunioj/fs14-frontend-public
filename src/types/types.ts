@@ -3,38 +3,11 @@ import { store } from '../store'
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
-export type TAlbum = {
-  albumId: string
-  albumName: string
-  artistName: string
-  price: number
-  stock: number
-  tags: string[]
-}
-
-export type TPurchase = Omit<TAlbum, 'tags' | 'stock' | 'price'> & {
-  cost: number
-  quantity: number
-}
-
-export type TOrder = {
-  orderId: string
-  user: string
-  purchaseDate: string
-  albums: TPurchase[]
-}
-
-export type TUser = {
-  loading: boolean
-  error: boolean
-  message: null | string
-  email: null | string
-  expires: null | number
-  familyName: null | string
-  givenName: null | string
-  picture: null | string
-  role: null | string
-  orders: null | TOrder[]
+export type TAppState = {
+  albums: TAlbumsState
+  filter: TFilterState
+  user: TUserState
+  orders: TOrdersState
 }
 
 export type TAlbumsState = {
@@ -45,17 +18,48 @@ export type TAlbumsState = {
   pages: null | number
 }
 
-export type TAppState = {
-  albums: TAlbumsState
-  filter: TFilterState
-  user: TUser
-}
-
 export type TFilterState = {
   sortField: string
   direction: string
   query: null | string
   page: number
+}
+
+export type TUserState = {
+  email: null | string
+  expires: null | number
+  familyName: null | string
+  givenName: null | string
+  picture: null | string
+  role: null | string
+}
+
+export type TPurchase = Omit<TAlbum, 'tags' | 'stock' | 'price'> & {
+  cost: number
+  quantity: number
+}
+
+export type TOrdersState = {
+  data: null | TOrder[]
+  loading: boolean
+  error: boolean
+  message: string | null
+}
+
+export type TOrder = {
+  orderId: string
+  user: string
+  purchaseDate: string
+  albums: TPurchase[]
+}
+
+export type TAlbum = {
+  albumId: string
+  albumName: string
+  artistName: string
+  price: number
+  stock: number
+  tags: string[]
 }
 
 export type TAlbumPagination = {

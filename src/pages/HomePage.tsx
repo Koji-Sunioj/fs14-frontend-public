@@ -4,10 +4,12 @@ import { fetchAlbums } from '../features/albums/albumSlice'
 import { TAppState, AppDispatch, TFilterState } from '../types/types'
 import { setFilter, initialFilterState } from '../features/filter/filterSlice'
 
+import Row from 'react-bootstrap/Row'
 import Alert from 'react-bootstrap/Alert'
 
-import AlbumRows from '../components/AlbumRows'
+import AlbumCard from '../components/AlbumCard'
 import AlbumQuery from '../components/AlbumQuery'
+import AlbumSkeleton from '../components/AlbumSkeleton'
 import AlbumPagination from '../components/AlbumPagination'
 
 const HomePage = () => {
@@ -89,8 +91,20 @@ const HomePage = () => {
         changeSelect={changeSelect}
         searchDisable={searchDisable}
       />
-      {data !== null && <AlbumRows data={data} type={'real'} tagToQuery={tagToQuery} />}
-      {shouldLoad && <AlbumRows data={[0, 1, 2, 3, 4, 5]} type={'fake'} />}
+      {data !== null && (
+        <Row>
+          {data.map((album) => (
+            <AlbumCard tagToQuery={tagToQuery} album={album} key={album.albumId} />
+          ))}
+        </Row>
+      )}
+      {shouldLoad && (
+        <Row>
+          {[0, 1, 2, 3, 4, 5].map((fakeCard) => (
+            <AlbumSkeleton key={fakeCard} />
+          ))}
+        </Row>
+      )}
       {pages !== null && <AlbumPagination pages={pages} filter={filter} changePage={changePage} />}
       {error && <Alert variant="danger">{message}</Alert>}
     </>

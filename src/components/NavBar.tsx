@@ -6,6 +6,7 @@ import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
 
 import jwt_decode from 'jwt-decode'
 import Nav from 'react-bootstrap/Nav'
+import Badge from 'react-bootstrap/Badge'
 import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
 import Container from 'react-bootstrap/Container'
@@ -42,7 +43,7 @@ const NavBar = () => {
               </Nav.Link>
             )}
           </Nav>
-          <Nav>
+          <Nav style={{ width: '20vw', display: 'flex', justifyContent: 'end' }}>
             {validUser ? (
               <Button variant="light" onClick={signOut}>
                 Sign out
@@ -52,7 +53,6 @@ const NavBar = () => {
             )}
           </Nav>
         </Navbar.Collapse>
-        {validUser && <p>asd</p>}
       </Container>
     </Navbar>
   )
