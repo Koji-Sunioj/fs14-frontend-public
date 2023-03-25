@@ -1,7 +1,9 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, TAppState } from '../types/types'
 import { setUser, resetUser } from '../features/user/userSlice'
+import { resetCart } from '../features/cart/cartSlice'
+import { resetOrders } from '../features/orders/ordersSlice'
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
 
 import jwt_decode from 'jwt-decode'
@@ -17,6 +19,8 @@ const NavBar = () => {
     cart: { purchases }
   } = useSelector((state: TAppState) => state)
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   const responseMessage = (response: CredentialResponse) => {
     const decoded = jwt_decode(response.credential!)
@@ -25,6 +29,12 @@ const NavBar = () => {
 
   const signOut = () => {
     dispatch(resetUser())
+    dispatch(resetCart())
+    dispatch(resetOrders())
+    if (pathname !== '/') {
+      navigate('/')
+    }
+    console.log(pathname)
   }
 
   const validUser = email !== null && expires !== null && expires! > Math.floor(Date.now() / 1000)
