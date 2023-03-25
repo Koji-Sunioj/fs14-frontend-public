@@ -22,7 +22,10 @@ export const ordersSlice = createSlice({
   name: 'orders',
   initialState: initialOrdersState,
   reducers: {
-    resetOrers: () => initialOrdersState
+    resetOrers: () => initialOrdersState,
+    checkOutOrder: (state, action) => {
+      state.data?.push(action.payload)
+    }
   },
   extraReducers(builder) {
     builder
@@ -44,5 +47,5 @@ export const ordersSlice = createSlice({
   }
 })
 
-export const { resetOrers } = ordersSlice.actions
+export const { resetOrers, checkOutOrder } = ordersSlice.actions
 export default ordersSlice.reducer

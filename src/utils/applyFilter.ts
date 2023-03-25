@@ -13,10 +13,13 @@ export const applyFilter = (filter: TFilterState, albums: TAlbum[]) => {
   const key = sortField as keyof TAlbum
   const next = direction === 'ascending' ? 1 : -1
   const prev = next === 1 ? -1 : 1
-  albums.sort((a: TAlbum, b: TAlbum) => (a[key] > b[key] ? next : b[key!] > a[key] ? prev : 0))
+  const sortedAlbums = albums.sort((a: TAlbum, b: TAlbum) =>
+    a[key] > b[key] ? next : b[key!] > a[key] ? prev : 0
+  )
 
+  // filteredAlbums: albums.slice(page * 6 - 6, page * 6),
   return {
-    filteredAlbums: albums.slice(page * 6 - 6, page * 6),
+    sortedAlbums,
     pages: Math.ceil(albums.length / 6)
   }
 }

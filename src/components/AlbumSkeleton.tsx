@@ -20,7 +20,6 @@ const AlbumSkeleton = () => (
             <Placeholder.Button variant="info" lg={4} style={{ margin: '2px' }} key={item} />
           ))}
         </Placeholder>
-        <Placeholder.Button variant="primary" lg={2} />
       </Card.Body>
     </Card>
   </Col>

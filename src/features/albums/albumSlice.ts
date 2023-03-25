@@ -3,7 +3,7 @@ import { TAlbumsState, TFilterState } from '../../types/types'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 export const fetchAlbums = createAsyncThunk('fetch-albums', async (filter: TFilterState) => {
-  const request = await fetch('albums.json')
+  const request = await fetch('/albums.json')
   const response = await request.json()
   if (!request.ok) {
     const { message } = response
@@ -30,6 +30,11 @@ export const albumSlice = createSlice({
       const { albumId } = action.payload
       const index = state.data!.findIndex((album) => album.albumId === albumId)
       state.data![index].stock--
+    },
+    incrementStock: (state, action) => {
+      const { albumId } = action.payload
+      const index = state.data!.findIndex((album) => album.albumId === albumId)
+      state.data![index].stock++
     }
   },
   extraReducers(builder) {
@@ -40,8 +45,8 @@ export const albumSlice = createSlice({
       })
       .addCase(fetchAlbums.fulfilled, (state, action) => {
         const { filter, albums } = action.payload
-        const { filteredAlbums, pages } = applyFilter(filter, albums)
-        state.data = filteredAlbums
+        const { sortedAlbums, pages } = applyFilter(filter, albums)
+        state.data = sortedAlbums
         state.loading = false
         state.pages = pages
       })
@@ -53,5 +58,5 @@ export const albumSlice = createSlice({
   }
 })
 
-export const { resetAlbums, decrementStock } = albumSlice.actions
+export const { resetAlbums, decrementStock, incrementStock } = albumSlice.actions
 export default albumSlice.reducer

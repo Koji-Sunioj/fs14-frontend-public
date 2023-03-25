@@ -1,8 +1,11 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchOrders } from '../features/orders/ordersSlice'
 import { AppDispatch, TAppState } from '../types/types'
+import { resetCart } from '../features/cart/cartSlice'
+import { fetchOrders, checkOutOrder } from '../features/orders/ordersSlice'
 
+import { v4 as uuid4 } from 'uuid'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Card from 'react-bootstrap/Card'
@@ -23,6 +26,17 @@ const MyAccount = () => {
     shouldFetch && dispatch(fetchOrders(email!))
   }, [shouldFetch])
 
+  const checkOutPurchases = () => {
+    const newOrder = {
+      albums: purchases,
+      orderId: uuid4(),
+      user: email,
+      purchaseDate: new Date().toISOString().replace(/\.\d+/, '')
+    }
+    dispatch(checkOutOrder(newOrder))
+    dispatch(resetCart())
+  }
+
   const shouldRender = data !== null
 
   return (
@@ -40,30 +54,22 @@ const MyAccount = () => {
                   {purchases.map((purchase) => {
                     const { artistName, albumName, quantity, cost, albumId } = purchase
                     return (
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          justifyContent: 'space-between'
-                        }}>
-                        <Card.Text style={{ flex: '3' }}>
-                          {artistName} - {albumName} x {quantity} = &euro;
-                          {cost.toFixed(2)}
-                        </Card.Text>
-                        <div style={{ flex: '1', justifyContent: 'flex-end', display: 'flex' }}>
-                          <div>
-                            <Button variant="danger">&lt;</Button>
-                            <Button variant="primary">&gt;</Button>
-                          </div>
-                        </div>
-                      </div>
+                      <Card.Text style={{ flex: '3' }}>
+                        <Link to={`/album/${albumId}`}>
+                          {artistName} - {albumName}
+                        </Link>{' '}
+                        x {quantity} = &euro;
+                        {cost.toFixed(2)}
+                      </Card.Text>
                     )
                   })}
                   <Card.Text>
                     total: &euro;
                     {purchases.reduce((sum, purchase) => sum + purchase.cost, 0).toFixed(2)}
                   </Card.Text>
-                  <Button>Checkout</Button>
+                  <Button disabled={data === null} onClick={checkOutPurchases}>
+                    Checkout
+                  </Button>
                 </Card.Body>
               </Card>
             </Col>

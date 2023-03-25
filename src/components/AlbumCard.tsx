@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { addToCart } from '../features/cart/cartSlice'
 import { decrementStock } from '../features/albums/albumSlice'
@@ -19,7 +20,7 @@ const AlbumCard = ({ album, tagToQuery }: TAlbumCard) => {
     <Col lg="4" className="mb-3">
       <Card>
         <Card.Body>
-          <Card.Title>
+          <Card.Title as={Link} to={`album/${albumId}`}>
             {artistName} - {albumName}
           </Card.Title>
           <Card.Text className="card-p">stock: {stock}</Card.Text>
@@ -40,7 +41,7 @@ const AlbumCard = ({ album, tagToQuery }: TAlbumCard) => {
             ))}
           </Card.Text>
           <div>
-            <Button
+            {/* <Button
               size="sm"
               variant="primary"
               disabled={email === null || stock === 0}
@@ -57,7 +58,7 @@ const AlbumCard = ({ album, tagToQuery }: TAlbumCard) => {
                 dispatch(decrementStock({ albumId: albumId }))
               }}>
               Buy
-            </Button>
+            </Button> */}
           </div>
         </Card.Body>
       </Card>
