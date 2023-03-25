@@ -15,7 +15,7 @@ import Container from 'react-bootstrap/Container'
 
 const NavBar = () => {
   const {
-    user: { email, expires },
+    user: { email, expires, role },
     cart: { purchases }
   } = useSelector((state: TAppState) => state)
   const dispatch = useDispatch<AppDispatch>()
@@ -34,10 +34,10 @@ const NavBar = () => {
     if (pathname !== '/') {
       navigate('/')
     }
-    console.log(pathname)
   }
 
-  const validUser = email !== null && expires !== null && expires! > Math.floor(Date.now() / 1000)
+  const validUser = email !== null && expires! > Math.floor(Date.now() / 1000)
+  const isAdmin = validUser && role === 'admin'
   const cartTicks =
     purchases.length > 0 ? purchases.reduce((sum, purchase) => sum + purchase.quantity, 0) : 0
 
@@ -53,6 +53,11 @@ const NavBar = () => {
             {validUser && (
               <Nav.Link as={Link} to="/my-account">
                 My account{cartTicks > 0 && <Badge bg="danger">{cartTicks}</Badge>}
+              </Nav.Link>
+            )}
+            {isAdmin && (
+              <Nav.Link as={Link} to="/admin">
+                Admin Panel
               </Nav.Link>
             )}
           </Nav>

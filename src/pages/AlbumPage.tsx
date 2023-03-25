@@ -40,7 +40,9 @@ const AlbumPage = () => {
     tags: string[],
     description: string
 
-  if (album !== null) {
+  const validAlbum = album !== null && album !== undefined
+
+  if (validAlbum) {
     ;({ albumName, artistName, price, stock, tags, description } = album!)
   }
 
@@ -71,7 +73,7 @@ const AlbumPage = () => {
 
   return (
     <Row>
-      {album !== null && (
+      {validAlbum && (
         <Col lg={{ span: 6, offset: 3 }} className="mt-3">
           <Card>
             <Card.Body>
@@ -129,6 +131,7 @@ const AlbumPage = () => {
           </Card>
         </Col>
       )}
+      {album === undefined && <h2>No album matches this URL</h2>}
     </Row>
   )
 }

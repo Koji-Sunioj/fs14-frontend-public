@@ -6,17 +6,12 @@ body {
     overflow-y: scroll; 
     background-image: url("/assets/background.png") ;
     background-size: cover;
- 
 }
 
 .card-body a
 {
     text-decoration: none;
-    
-
 }
-
-
 
 p.card-text, div.card-title.h5, a.card-title {
     margin-bottom:12px
