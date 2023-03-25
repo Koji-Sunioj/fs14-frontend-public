@@ -80,8 +80,6 @@ const HomePage = () => {
 
   const shouldLoad = data === null && loading
 
-  console.log(data)
-
   return (
     <>
       <AlbumQuery

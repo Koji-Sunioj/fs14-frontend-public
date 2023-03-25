@@ -75,12 +75,12 @@ const AlbumPage = () => {
         <Col lg={{ span: 6, offset: 3 }} className="mt-3">
           <Card>
             <Card.Body>
-              <Card.Title>
+              <Card.Title as={'h5'}>
                 {artistName!} - {albumName!}
               </Card.Title>
-              <Card.Text className="card-p">stock: {stock!}</Card.Text>
-              <Card.Text className="card-p mb-2">price: &euro;{price!.toFixed(2)}</Card.Text>
-              <Card.Text className="card-p mb-2">{description!}</Card.Text>
+              <Card.Text>stock: {stock!}</Card.Text>
+              <Card.Text>price: &euro;{price!.toFixed(2)}</Card.Text>
+              <Card.Text>{description!}</Card.Text>
               <Card.Text>
                 {tags!.map((tag) => (
                   <Button

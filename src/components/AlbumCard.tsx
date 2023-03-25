@@ -20,11 +20,13 @@ const AlbumCard = ({ album, tagToQuery }: TAlbumCard) => {
     <Col lg="4" className="mb-3">
       <Card>
         <Card.Body>
-          <Card.Title as={Link} to={`album/${albumId}`}>
-            {artistName} - {albumName}
+          <Card.Title as={'h5'}>
+            <Link to={`album/${albumId}`}>
+              {artistName} - {albumName}
+            </Link>
           </Card.Title>
-          <Card.Text className="card-p">stock: {stock}</Card.Text>
-          <Card.Text className="card-p mb-2">price: &euro;{price.toFixed(2)}</Card.Text>
+          <Card.Text>stock: {stock}</Card.Text>
+          <Card.Text>price: &euro;{price.toFixed(2)}</Card.Text>
           <Card.Text>
             {tags.map((tag) => (
               <Button
@@ -40,26 +42,6 @@ const AlbumCard = ({ album, tagToQuery }: TAlbumCard) => {
               </Button>
             ))}
           </Card.Text>
-          <div>
-            {/* <Button
-              size="sm"
-              variant="primary"
-              disabled={email === null || stock === 0}
-              onClick={() => {
-                dispatch(
-                  addToCart({
-                    albumId: albumId,
-                    quantity: 1,
-                    artistName: artistName,
-                    albumName: albumName,
-                    cost: price
-                  })
-                )
-                dispatch(decrementStock({ albumId: albumId }))
-              }}>
-              Buy
-            </Button> */}
-          </div>
         </Card.Body>
       </Card>
     </Col>

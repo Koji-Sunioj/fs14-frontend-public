@@ -91,10 +91,10 @@ const MyAccount = () => {
                       <Card.Title>order id: {orderId}</Card.Title>
                       <Card.Text>date: {localDate}</Card.Text>
                       {albums.map((album) => (
-                        <p key={album.albumId}>
+                        <Card.Text key={album.albumId}>
                           {album.artistName} - {album.albumName} x {album.quantity} = &euro;
                           {album.cost.toFixed(2)}
-                        </p>
+                        </Card.Text>
                       ))}
                       <Card.Text>total: &euro;{total}</Card.Text>
                     </Card.Body>
