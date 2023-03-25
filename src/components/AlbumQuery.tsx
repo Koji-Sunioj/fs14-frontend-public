@@ -8,6 +8,7 @@ import InputGroup from 'react-bootstrap/InputGroup'
 
 const AlbumQuery = ({
   filter,
+  loading,
   buttonRef,
   createQuery,
   changeSelect,
@@ -18,7 +19,7 @@ const AlbumQuery = ({
   const keyOrValue = query === null ? '' : query
 
   return (
-    <fieldset>
+    <fieldset disabled={loading}>
       <Row className="mt-3 mb-3">
         <Col lg={4}>
           <Form.Label>Sort by</Form.Label>

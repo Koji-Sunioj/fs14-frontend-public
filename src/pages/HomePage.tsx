@@ -80,6 +80,8 @@ const HomePage = () => {
 
   const shouldLoad = data === null && loading
 
+  console.log(data)
+
   return (
     <>
       <AlbumQuery
@@ -104,7 +106,9 @@ const HomePage = () => {
           ))}
         </Row>
       )}
-      {pages !== null && <AlbumPagination pages={pages} filter={filter} changePage={changePage} />}
+      {pages !== null && (
+        <AlbumPagination loading={loading} pages={pages} filter={filter} changePage={changePage} />
+      )}
       {error && <Alert variant="danger">{message}</Alert>}
     </>
   )

@@ -35,7 +35,7 @@ export type TUserState = {
   role: null | string
 }
 
-export type TPurchase = Omit<TAlbum, 'tags' | 'stock' | 'price'> & {
+export type TPurchase = Omit<TAlbum, 'tags' | 'stock' | 'price' | 'description'> & {
   cost: number
   quantity: number
 }
@@ -59,11 +59,13 @@ export type TAlbum = {
   albumName: string
   artistName: string
   price: number
+  description: string
   stock: number
   tags: string[]
 }
 
 export type TAlbumPagination = {
+  loading: boolean
   pages: number
   filter: TFilterState
   changePage: (page: number) => void

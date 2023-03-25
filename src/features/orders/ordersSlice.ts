@@ -24,7 +24,7 @@ export const ordersSlice = createSlice({
   reducers: {
     resetOrders: () => initialOrdersState,
     checkOutOrder: (state, action) => {
-      state.data?.push(action.payload)
+      state.data?.unshift(action.payload)
     }
   },
   extraReducers(builder) {
@@ -35,7 +35,12 @@ export const ordersSlice = createSlice({
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
         const { orders, user } = action.payload
-        const userOrders = orders.filter((order: TOrder) => order.user === user)
+        const userOrders = orders
+          .filter((order: TOrder) => order.user === user)
+          .sort(
+            (a: TOrder, b: TOrder) =>
+              new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime()
+          )
         state.loading = false
         state.data = userOrders
       })
