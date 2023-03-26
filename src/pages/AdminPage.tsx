@@ -2,16 +2,11 @@ import { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, TAppState } from '../types/types'
 import { fetchAlbums } from '../features/albums/albumSlice'
-import { adminAddAlbum } from '../features/albums/albumSlice'
 
 import AlbumForm from '../components/AlbumForm'
 
 import { v4 as uuid4 } from 'uuid'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
 import Table from 'react-bootstrap/Table'
-import Button from 'react-bootstrap/Button'
 
 const AdminPage = () => {
   const tagRef = useRef<HTMLInputElement>(null)
