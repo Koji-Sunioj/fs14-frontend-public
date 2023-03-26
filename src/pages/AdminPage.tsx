@@ -20,7 +20,6 @@ const AdminPage = () => {
   } = useSelector((state: TAppState) => state)
 
   const submitAlbum = (event: React.FormEvent<HTMLFormElement>) => {
-    console.log(event)
     event.preventDefault()
     const {
       currentTarget: {
@@ -33,7 +32,7 @@ const AdminPage = () => {
     } = event
 
     const validForm = [artistName, albumName, description, price, stock, tags.join(',')].every(
-      (field) => field.length > 0
+      (field) => field.length > 0 && !isNaN(price) && !isNaN(stock)
     )
 
     if (validForm) {
@@ -56,13 +55,20 @@ const AdminPage = () => {
           break
         case 'edit':
           newAlbum.albumId = editTarget!
-          console.log(newAlbum)
           dispatch(adminPatchAlbum(newAlbum))
           break
         default:
           return null
       }
+      flow === 'edit' && setEditTarget(null)
+      setTags([])
       ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
+    }
+  }
+
+  const beforeAddTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
     }
   }
 
@@ -93,12 +99,13 @@ const AdminPage = () => {
   return (
     <>
       <AlbumForm
-        album={editAlbum}
         tags={tags}
         tagRef={tagRef}
-        submitAlbum={submitAlbum}
+        album={editAlbum}
         addTag={addTag}
         removeTag={removeTag}
+        submitAlbum={submitAlbum}
+        beforeAddTag={beforeAddTag}
       />
 
       <h3 className="mb-3 mt-3">current stock: </h3>

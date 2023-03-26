@@ -84,6 +84,7 @@ export type TAlbumForm = {
   tags: string[]
   submitAlbum: (event: React.FormEvent<HTMLFormElement>) => void
   addTag: (event: React.KeyboardEvent<HTMLInputElement>) => void
+  beforeAddTag: (event: React.KeyboardEvent<HTMLInputElement>) => void
   removeTag: (tag: string) => void
   tagRef: React.RefObject<HTMLInputElement>
 }

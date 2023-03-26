@@ -5,7 +5,15 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-const AlbumForm = ({ album, tags, tagRef, submitAlbum, addTag, removeTag }: TAlbumForm) => {
+const AlbumForm = ({
+  album,
+  tags,
+  tagRef,
+  submitAlbum,
+  addTag,
+  removeTag,
+  beforeAddTag
+}: TAlbumForm) => {
   let artistName = '',
     albumName = '',
     description = '',
@@ -59,15 +67,15 @@ const AlbumForm = ({ album, tags, tagRef, submitAlbum, addTag, removeTag }: TAlb
           <Row>
             <Col lg="4">
               <Form.Label>Tags</Form.Label>
-              <Form.Control onKeyUp={addTag} type="text" ref={tagRef} />
+              <Form.Control onKeyUp={addTag} onKeyDown={beforeAddTag} type="text" ref={tagRef} />
             </Col>
             <Col lg="4">
               <Form.Label>Stock</Form.Label>
-              <Form.Control type="number" name="stock" defaultValue={stock} />
+              <Form.Control type="text" name="stock" defaultValue={stock} />
             </Col>
             <Col lg="4">
               <Form.Label>Price</Form.Label>
-              <Form.Control type="number" name="price" step=".01" defaultValue={price} />
+              <Form.Control type="text" name="price" defaultValue={price} />
             </Col>
           </Row>
         </Form.Group>
