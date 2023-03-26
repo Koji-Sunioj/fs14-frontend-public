@@ -1,7 +1,13 @@
 import { TFilterState, TAlbum } from '../types/types'
 
 export const applyFilter = (filter: TFilterState, albums: TAlbum[]) => {
-  const { query, sortField, direction, page } = filter
+  const adminAlbum = localStorage.getItem('adminAlbum')!
+
+  if (adminAlbum !== null) {
+    albums.push(JSON.parse(adminAlbum))
+  }
+
+  const { query, sortField, direction } = filter
   if (query !== null) {
     albums = albums.filter(
       (album: TAlbum) =>
@@ -16,8 +22,6 @@ export const applyFilter = (filter: TFilterState, albums: TAlbum[]) => {
   const sortedAlbums = albums.sort((a: TAlbum, b: TAlbum) =>
     a[key] > b[key] ? next : b[key!] > a[key] ? prev : 0
   )
-
-  // filteredAlbums: albums.slice(page * 6 - 6, page * 6),
   return {
     sortedAlbums,
     pages: Math.ceil(albums.length / 6)

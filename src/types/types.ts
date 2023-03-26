@@ -80,6 +80,14 @@ export type TAlbumQuery = {
   searchDisable: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
+export type TAlbumForm = {
+  tags: string[]
+  submitAlbum: (event: React.FormEvent<HTMLFormElement>) => void
+  addTag: (event: React.KeyboardEvent<HTMLInputElement>) => void
+  removeTag: (tag: string) => void
+  tagRef: React.RefObject<HTMLInputElement>
+}
+
 export type TAlbumRows = {
   data: TAlbum[] | number[]
   type: string

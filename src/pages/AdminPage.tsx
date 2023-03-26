@@ -1,7 +1,12 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, TAppState } from '../types/types'
+import { fetchAlbums } from '../features/albums/albumSlice'
+import { adminAddAlbum } from '../features/albums/albumSlice'
 
+import AlbumForm from '../components/AlbumForm'
+
+import { v4 as uuid4 } from 'uuid'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
@@ -9,14 +14,71 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 
 const AdminPage = () => {
-  const [tags, setTags] = useState([])
+  const tagRef = useRef<HTMLInputElement>(null)
+  const [flow, setFlow] = useState<string>('add')
+  const [tags, setTags] = useState<string[]>([])
   const dispatch = useDispatch<AppDispatch>()
   const {
-    albums: { data }
+    albums: { data },
+    filter
   } = useSelector((state: TAppState) => state)
 
   const submitAlbum = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const {
+      currentTarget: {
+        artist: { value: artistName },
+        album: { value: albumName },
+        price: { value: price },
+        stock: { value: stock },
+        description: { value: description }
+      }
+    } = event
+
+    if (
+      [artistName, albumName, description, price, stock, tags.join(',')].every(
+        (field) => field.length > 0
+      )
+    ) {
+      const newAlbum = {
+        albumId: uuid4(),
+        artistName: artistName,
+        albumName: albumName,
+        price: Number(price),
+        stock: Number(stock),
+        tags: tags
+      }
+
+      switch (flow) {
+        case 'add':
+          localStorage.setItem('adminAlbum', JSON.stringify(newAlbum))
+          dispatch(fetchAlbums(filter))
+          break
+        case 'edit':
+          break
+        default:
+          return null
+      }
+      ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
+    }
+  }
+
+  const addTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const {
+      currentTarget: { value: tag }
+    } = event
+
+    if (event.key === 'Enter' && tag.length > 0) {
+      const tagCopy = [...tags]
+      tagCopy.push(tag)
+      setTags(tagCopy)
+      tagRef.current!.value = ''
+    }
+  }
+
+  const removeTag = (tag: string) => {
+    const tagCopy = tags.filter((stateTag) => stateTag !== tag)
+    setTags(tagCopy)
   }
 
   return (
@@ -54,52 +116,15 @@ const AdminPage = () => {
           })}
         </tbody>
       </Table>
-      <h3>add an album: </h3>
-
-      <Form
-        style={{ backgroundColor: 'white', padding: '10px', borderRadius: '10px' }}
-        onSubmit={submitAlbum}>
-        <Form.Group className="mb-3">
-          <Row>
-            <Col lg="6">
-              <Form.Label>Artist</Form.Label>
-              <Form.Control placeholder="Wu Tang Clan, Katy Perry..." name="artist" />
-            </Col>
-            <Col lg="6">
-              <Form.Label>Album</Form.Label>
-              <Form.Control placeholder="Stillmatic, Merry Christmas..." name="album" />
-            </Col>
-          </Row>
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            placeholder="Iron maiden's second album, was very influential.."
-            name="description"
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Row>
-            <Col lg="4">
-              <Form.Label>Tags</Form.Label>
-              <Form.Control type="text" name="tags" />
-            </Col>
-            <Col lg="4">
-              <Form.Label>Stock</Form.Label>
-              <Form.Control type="number" name="stock" />
-            </Col>
-            <Col lg="4">
-              <Form.Label>Price</Form.Label>
-              <Form.Control type="number" name="price" />
-            </Col>
-          </Row>
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
+      {flow === 'add' && (
+        <AlbumForm
+          tags={tags}
+          tagRef={tagRef}
+          submitAlbum={submitAlbum}
+          addTag={addTag}
+          removeTag={removeTag}
+        />
+      )}
     </>
   )
 }
