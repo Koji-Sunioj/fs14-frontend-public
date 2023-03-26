@@ -16,7 +16,6 @@ export type TAlbumsState = {
   error: boolean
   loading: boolean
   message: null | string
-  pages: null | number
 }
 
 export type TFilterState = {
@@ -81,6 +80,7 @@ export type TAlbumQuery = {
 }
 
 export type TAlbumForm = {
+  album?: null | TAlbum
   tags: string[]
   submitAlbum: (event: React.FormEvent<HTMLFormElement>) => void
   addTag: (event: React.KeyboardEvent<HTMLInputElement>) => void

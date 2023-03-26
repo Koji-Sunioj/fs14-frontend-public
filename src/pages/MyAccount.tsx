@@ -54,7 +54,7 @@ const MyAccount = () => {
                   {purchases.map((purchase) => {
                     const { artistName, albumName, quantity, cost, albumId } = purchase
                     return (
-                      <Card.Text style={{ flex: '3' }}>
+                      <Card.Text style={{ flex: '3' }} key={albumId}>
                         <Link to={`/album/${albumId}`}>
                           {artistName} - {albumName}
                         </Link>{' '}

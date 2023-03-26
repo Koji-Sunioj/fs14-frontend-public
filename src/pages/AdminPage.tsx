@@ -1,17 +1,18 @@
 import { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { AppDispatch, TAppState } from '../types/types'
-import { fetchAlbums } from '../features/albums/albumSlice'
+import { AppDispatch, TAppState, TAlbum } from '../types/types'
+import { adminRemoveAlbum, adminAddAlbum, adminPatchAlbum } from '../features/albums/albumSlice'
 
 import AlbumForm from '../components/AlbumForm'
 
 import { v4 as uuid4 } from 'uuid'
 import Table from 'react-bootstrap/Table'
+import Button from 'react-bootstrap/Button'
 
 const AdminPage = () => {
   const tagRef = useRef<HTMLInputElement>(null)
-  const [flow, setFlow] = useState<string>('add')
   const [tags, setTags] = useState<string[]>([])
+  const [editTarget, setEditTarget] = useState<string | null>(null)
   const dispatch = useDispatch<AppDispatch>()
   const {
     albums: { data },
@@ -19,6 +20,7 @@ const AdminPage = () => {
   } = useSelector((state: TAppState) => state)
 
   const submitAlbum = (event: React.FormEvent<HTMLFormElement>) => {
+    console.log(event)
     event.preventDefault()
     const {
       currentTarget: {
@@ -30,26 +32,32 @@ const AdminPage = () => {
       }
     } = event
 
-    if (
-      [artistName, albumName, description, price, stock, tags.join(',')].every(
-        (field) => field.length > 0
-      )
-    ) {
-      const newAlbum = {
-        albumId: uuid4(),
+    const validForm = [artistName, albumName, description, price, stock, tags.join(',')].every(
+      (field) => field.length > 0
+    )
+
+    if (validForm) {
+      const newAlbum: Partial<TAlbum> = {
+        albumId: undefined,
         artistName: artistName,
         albumName: albumName,
+        description: description,
         price: Number(price),
         stock: Number(stock),
         tags: tags
       }
 
+      const flow = editTarget === null ? 'add' : 'edit'
+
       switch (flow) {
         case 'add':
-          localStorage.setItem('adminAlbum', JSON.stringify(newAlbum))
-          dispatch(fetchAlbums(filter))
+          newAlbum.albumId = uuid4()
+          dispatch(adminAddAlbum(newAlbum))
           break
         case 'edit':
+          newAlbum.albumId = editTarget!
+          console.log(newAlbum)
+          dispatch(adminPatchAlbum(newAlbum))
           break
         default:
           return null
@@ -76,9 +84,24 @@ const AdminPage = () => {
     setTags(tagCopy)
   }
 
+  const removeAlbum = (albumId: string) => {
+    dispatch(adminRemoveAlbum(albumId))
+  }
+
+  const editAlbum = editTarget === null ? null : data?.find((album) => album.albumId === editTarget)
+
   return (
     <>
-      <h3>current stock: </h3>
+      <AlbumForm
+        album={editAlbum}
+        tags={tags}
+        tagRef={tagRef}
+        submitAlbum={submitAlbum}
+        addTag={addTag}
+        removeTag={removeTag}
+      />
+
+      <h3 className="mb-3 mt-3">current stock: </h3>
       <Table
         responsive
         striped
@@ -106,20 +129,29 @@ const AdminPage = () => {
                 <td>{price}</td>
                 <td>{stock}</td>
                 <td>{tags.join(', ')}</td>
+                <td>
+                  <Button
+                    onClick={() => {
+                      setEditTarget(albumId)
+                      setTags(tags)
+                    }}>
+                    Edit
+                  </Button>
+                </td>
+                <td>
+                  <Button
+                    variant="danger"
+                    onClick={() => {
+                      removeAlbum(albumId!)
+                    }}>
+                    Delete
+                  </Button>
+                </td>
               </tr>
             )
           })}
         </tbody>
       </Table>
-      {flow === 'add' && (
-        <AlbumForm
-          tags={tags}
-          tagRef={tagRef}
-          submitAlbum={submitAlbum}
-          addTag={addTag}
-          removeTag={removeTag}
-        />
-      )}
     </>
   )
 }

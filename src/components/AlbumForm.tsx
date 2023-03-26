@@ -5,10 +5,22 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-const AlbumForm = ({ tags, tagRef, submitAlbum, addTag, removeTag }: TAlbumForm) => {
+const AlbumForm = ({ album, tags, tagRef, submitAlbum, addTag, removeTag }: TAlbumForm) => {
+  let artistName = '',
+    albumName = '',
+    description = '',
+    price: string | number = '',
+    stock: string | number = '',
+    albumId = ''
+  if (album !== null) {
+    ;({ artistName, albumName, description, price, stock, albumId } = album!)
+  }
+
+  const title = album === null ? 'add an album: ' : `edit album ${albumId}: `
+
   return (
     <>
-      <h3>add an album: </h3>
+      <h3 className="mb-3 mt-3">{title}</h3>
       <Form
         id="admin-form"
         style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}
@@ -17,17 +29,26 @@ const AlbumForm = ({ tags, tagRef, submitAlbum, addTag, removeTag }: TAlbumForm)
           <Row>
             <Col lg="6">
               <Form.Label>Artist</Form.Label>
-              <Form.Control placeholder="Wu Tang Clan, Katy Perry..." name="artist" />
+              <Form.Control
+                placeholder="Wu Tang Clan, Katy Perry..."
+                name="artist"
+                defaultValue={artistName}
+              />
             </Col>
             <Col lg="6">
               <Form.Label>Album</Form.Label>
-              <Form.Control placeholder="Stillmatic, Merry Christmas..." name="album" />
+              <Form.Control
+                placeholder="Stillmatic, Merry Christmas..."
+                name="album"
+                defaultValue={albumName}
+              />
             </Col>
           </Row>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
           <Form.Control
+            defaultValue={description}
             as="textarea"
             rows={3}
             placeholder="Iron maiden's second album, was very influential.."
@@ -38,15 +59,15 @@ const AlbumForm = ({ tags, tagRef, submitAlbum, addTag, removeTag }: TAlbumForm)
           <Row>
             <Col lg="4">
               <Form.Label>Tags</Form.Label>
-              <Form.Control onKeyUp={addTag} type="text" name="tags" ref={tagRef} />
+              <Form.Control onKeyUp={addTag} type="text" ref={tagRef} />
             </Col>
             <Col lg="4">
               <Form.Label>Stock</Form.Label>
-              <Form.Control type="number" name="stock" />
+              <Form.Control type="number" name="stock" defaultValue={stock} />
             </Col>
             <Col lg="4">
               <Form.Label>Price</Form.Label>
-              <Form.Control type="number" name="price" step=".01" />
+              <Form.Control type="number" name="price" step=".01" defaultValue={price} />
             </Col>
           </Row>
         </Form.Group>

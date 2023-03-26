@@ -1,9 +1,11 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, TAppState } from '../types/types'
-import { setUser, resetUser } from '../features/user/userSlice'
 import { resetCart } from '../features/cart/cartSlice'
+import { fetchAlbums } from '../features/albums/albumSlice'
 import { resetOrders } from '../features/orders/ordersSlice'
+import { setUser, resetUser } from '../features/user/userSlice'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
 
 import jwt_decode from 'jwt-decode'
@@ -16,11 +18,20 @@ import Container from 'react-bootstrap/Container'
 const NavBar = () => {
   const {
     user: { email, expires, role },
-    cart: { purchases }
+    cart: { purchases },
+    albums: { data, error, loading }
   } = useSelector((state: TAppState) => state)
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const { pathname } = useLocation()
+
+  const shouldFetch = data === null && !error && !loading
+  const fetchPath =
+    ['/', '/admin'].some((path) => path === pathname) || pathname.includes('/album/')
+
+  useEffect(() => {
+    shouldFetch && fetchPath && dispatch(fetchAlbums())
+  }, [shouldFetch, fetchPath])
 
   const responseMessage = (response: CredentialResponse) => {
     const decoded = jwt_decode(response.credential!)

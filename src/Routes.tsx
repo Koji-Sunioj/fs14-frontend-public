@@ -14,7 +14,7 @@ const AppRoutes = () => {
   const { email, expires, role } = useSelector((state: TAppState) => state.user)
   const validUser = email !== null && expires! > Math.floor(Date.now() / 1000)
   const isAdmin = validUser && role === 'admin'
-  console.log(isAdmin)
+
   return (
     <BrowserRouter>
       <NavBar />

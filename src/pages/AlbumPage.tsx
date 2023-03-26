@@ -1,9 +1,7 @@
-import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFilter } from '../features/filter/filterSlice'
-import { fetchAlbums } from '../features/albums/albumSlice'
 import { AppDispatch, TAppState, TPurchase } from '../types/types'
 import { addToCart, removeFromCart } from '../features/cart/cartSlice'
 import { decrementStock, incrementStock } from '../features/albums/albumSlice'
@@ -23,11 +21,6 @@ const AlbumPage = () => {
     cart: { purchases },
     filter
   } = useSelector((state: TAppState) => state)
-  const shouldFetch = data === null && !error && !loading
-
-  useEffect(() => {
-    shouldFetch && dispatch(fetchAlbums(filter))
-  }, [shouldFetch])
 
   const album = data !== null ? data?.find((album) => album.albumId === albumId) : null
   const isInCart =
@@ -67,7 +60,6 @@ const AlbumPage = () => {
     const newQuery = { query: tag.toLowerCase(), page: 1 }
     const newFilter = Object.assign({ ...filter }, newQuery)
     dispatch(setFilter(newFilter))
-    dispatch(fetchAlbums(newFilter))
     navigate('/')
   }
 

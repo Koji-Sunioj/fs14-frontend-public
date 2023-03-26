@@ -4,7 +4,7 @@ import { TFilterState } from '../../types/types'
 export const initialFilterState: TFilterState = {
   page: 1,
   direction: 'ascending',
-  sortField: 'artistName',
+  sortField: 'albumName',
   query: null
 }
 

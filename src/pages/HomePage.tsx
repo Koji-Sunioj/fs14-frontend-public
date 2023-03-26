@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react'
+import { applyFilter } from '../utils/applyFilter'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchAlbums } from '../features/albums/albumSlice'
-import { TAppState, AppDispatch, TFilterState } from '../types/types'
-import { setFilter, initialFilterState } from '../features/filter/filterSlice'
+import { TAppState, AppDispatch, TAlbum } from '../types/types'
+import { setFilter, resetFilter } from '../features/filter/filterSlice'
 
 import Row from 'react-bootstrap/Row'
 import Alert from 'react-bootstrap/Alert'
@@ -14,22 +15,11 @@ import AlbumPagination from '../components/AlbumPagination'
 
 const HomePage = () => {
   const {
-    albums: { data, loading, error, message, pages },
-    filter: { page },
+    albums: { data, loading, error, message },
     filter
   } = useSelector((state: TAppState) => state)
   const dispatch = useDispatch<AppDispatch>()
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const shouldFetch = data === null && !error && !loading
-
-  useEffect(() => {
-    shouldFetch && dispatch(fetchAlbums(filter))
-  }, [shouldFetch])
-
-  const mutateFilter = (newParams: TFilterState) => {
-    dispatch(setFilter(newParams))
-    dispatch(fetchAlbums(newParams))
-  }
 
   const changeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const {
@@ -38,7 +28,7 @@ const HomePage = () => {
     const sortObject: { [index: string]: string } = {}
     sortObject[name] = value
     const mutatedFilter = Object.assign({ ...filter }, sortObject)
-    mutateFilter(mutatedFilter)
+    dispatch(setFilter(mutatedFilter))
   }
 
   const createQuery = (event: React.FormEvent<HTMLFormElement>) => {
@@ -51,13 +41,13 @@ const HomePage = () => {
     if (query.length > 0) {
       const newQuery = { query: query.toLowerCase(), page: 1 }
       const mutatedFilter = Object.assign({ ...filter }, newQuery)
-      mutateFilter(mutatedFilter)
+      dispatch(setFilter(mutatedFilter))
     }
   }
 
   const changePage = (page: number) => {
     const mutatedPage = Object.assign({ ...filter }, { page: page })
-    mutateFilter(mutatedPage)
+    dispatch(setFilter(mutatedPage))
     window.scrollTo(0, 0)
   }
 
@@ -69,15 +59,21 @@ const HomePage = () => {
     emptyInput
       ? buttonRef.current!.setAttribute('disabled', 'true')
       : buttonRef.current!.removeAttribute('disabled')
-    emptyInput && mutateFilter(initialFilterState)
+    emptyInput && dispatch(resetFilter())
   }
 
   const tagToQuery = (tag: string) => {
     const newQuery = { query: tag.toLowerCase(), page: 1 }
     const mutatedFilter = Object.assign({ ...filter }, newQuery)
-    mutateFilter(mutatedFilter)
+    dispatch(setFilter(mutatedFilter))
   }
 
+  let sortedAlbums: TAlbum[] | null = null,
+    pages: number | null = null
+
+  if (data !== null) {
+    ;({ sortedAlbums, pages } = applyFilter(filter, data))
+  }
   const shouldLoad = data === null && loading
 
   return (
@@ -90,9 +86,9 @@ const HomePage = () => {
         changeSelect={changeSelect}
         searchDisable={searchDisable}
       />
-      {data !== null && (
+      {sortedAlbums !== null && (
         <Row>
-          {data.slice(page * 6 - 6, page * 6).map((album) => (
+          {sortedAlbums.map((album) => (
             <AlbumCard tagToQuery={tagToQuery} album={album} key={album.albumId} />
           ))}
         </Row>

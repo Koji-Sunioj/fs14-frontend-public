@@ -2,23 +2,21 @@ import { applyFilter } from '../../utils/applyFilter'
 import { TAlbumsState, TFilterState } from '../../types/types'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-export const fetchAlbums = createAsyncThunk('fetch-albums', async (filter: TFilterState) => {
+export const fetchAlbums = createAsyncThunk('fetch-albums', async () => {
   const request = await fetch('/albums.json')
   const response = await request.json()
   if (!request.ok) {
     const { message } = response
     throw new Error(message)
   }
-
-  return { filter, albums: response }
+  return { albums: response }
 })
 
 const initialAlbumsState: TAlbumsState = {
   data: null,
   loading: false,
   error: false,
-  message: null,
-  pages: null
+  message: null
 }
 
 export const albumSlice = createSlice({
@@ -28,6 +26,16 @@ export const albumSlice = createSlice({
     resetAlbums: () => initialAlbumsState,
     adminAddAlbum: (state, action) => {
       state.data!.unshift(action.payload)
+    },
+    adminPatchAlbum: (state, action) => {
+      const { albumId } = action.payload
+      const index = state.data!.findIndex((album) => album.albumId === albumId)
+      state.data![index] = action.payload
+    },
+    adminRemoveAlbum: (state, action) => {
+      const albumId = action.payload
+      const filtered = state.data?.filter((album) => album.albumId !== albumId)
+      state.data = filtered!
     },
     decrementStock: (state, action) => {
       const { albumId } = action.payload
@@ -47,11 +55,9 @@ export const albumSlice = createSlice({
         state.error = false
       })
       .addCase(fetchAlbums.fulfilled, (state, action) => {
-        const { filter, albums } = action.payload
-        const { sortedAlbums, pages } = applyFilter(filter, albums)
-        state.data = sortedAlbums
+        const { albums } = action.payload
+        state.data = albums
         state.loading = false
-        state.pages = pages
       })
       .addCase(fetchAlbums.rejected, (state, action) => {
         state.loading = false
@@ -61,5 +67,12 @@ export const albumSlice = createSlice({
   }
 })
 
-export const { resetAlbums, decrementStock, incrementStock, adminAddAlbum } = albumSlice.actions
+export const {
+  resetAlbums,
+  decrementStock,
+  incrementStock,
+  adminAddAlbum,
+  adminRemoveAlbum,
+  adminPatchAlbum
+} = albumSlice.actions
 export default albumSlice.reducer
