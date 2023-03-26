@@ -12,7 +12,8 @@ const AlbumForm = ({
   submitAlbum,
   addTag,
   removeTag,
-  beforeAddTag
+  beforeAddTag,
+  setEditTarget
 }: TAlbumForm) => {
   let artistName = '',
     albumName = '',
@@ -29,10 +30,7 @@ const AlbumForm = ({
   return (
     <>
       <h3 className="mb-3 mt-3">{title}</h3>
-      <Form
-        id="admin-form"
-        style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}
-        onSubmit={submitAlbum}>
+      <Form id="admin-form" onSubmit={submitAlbum}>
         <Form.Group className="mb-3">
           <Row>
             <Col lg="6">
@@ -84,7 +82,7 @@ const AlbumForm = ({
             tags.map((tag: string) => (
               <Button
                 key={tag}
-                style={{ margin: '2px 2px 2px 0px' }}
+                style={{ margin: '4px 4px 4px 0px' }}
                 variant="info"
                 onClick={() => {
                   removeTag(tag)
@@ -93,9 +91,21 @@ const AlbumForm = ({
               </Button>
             ))}
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" style={{ margin: '4px 4px 4px 0px' }}>
           Submit
         </Button>
+        <Button type="reset" variant="warning" style={{ margin: '4px 4px 4px 0px' }}>
+          Reset
+        </Button>
+        {album !== null && (
+          <Button
+            variant="success"
+            onClick={() => {
+              setEditTarget(null)
+            }}>
+            New album mode
+          </Button>
+        )}
       </Form>
     </>
   )

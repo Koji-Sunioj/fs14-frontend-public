@@ -2,18 +2,70 @@
     margin-bottom:3px
 }
 
-body {
-    overflow-y: scroll; 
-    background-image: url("/assets/background.png") ;
-    background-size: cover;
+label.form-label{
+    color:white
 }
 
-.card-body a
-{
+
+#admin-form {
+    border-radius: 10px;
+    padding: 10px;
+    border: 2px solid lightslategray;
+
+}
+
+body {
+    overflow-y: scroll;
+    color:black;
+    --bs-body-bg: black
+   
+}
+
+h2,h3 {
+    color:white
+
+}
+
+div.card{
+    border-radius: 10px;
+    background: black;
+    border: 2px solid lightslategray;
+}
+
+
+
+.card-body a, p ,h5
+{   
+    
+    color:white;
     text-decoration: none;
+}
+
+.card-title{
+    color:white;
+
+}
+
+div.table-responsive {
+
+    border-radius: 10px;
 }
 
 p.card-text, div.card-title.h5, a.card-title {
     margin-bottom:12px
 
 }
+
+@media only screen and (min-width: 992px) {
+    #admin-form {
+        width:50%
+    }
+  }
+
+
+  @media only screen and (max-width: 993px) {
+    #admin-form {
+        width:100%
+    }
+  }
+

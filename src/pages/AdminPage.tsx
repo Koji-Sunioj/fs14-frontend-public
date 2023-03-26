@@ -4,10 +4,9 @@ import { AppDispatch, TAppState, TAlbum } from '../types/types'
 import { adminRemoveAlbum, adminAddAlbum, adminPatchAlbum } from '../features/albums/albumSlice'
 
 import AlbumForm from '../components/AlbumForm'
+import AdminTable from '../components/AdminTable'
 
 import { v4 as uuid4 } from 'uuid'
-import Table from 'react-bootstrap/Table'
-import Button from 'react-bootstrap/Button'
 
 const AdminPage = () => {
   const tagRef = useRef<HTMLInputElement>(null)
@@ -91,6 +90,7 @@ const AdminPage = () => {
   }
 
   const removeAlbum = (albumId: string) => {
+    setEditTarget !== null && setEditTarget(null)
     dispatch(adminRemoveAlbum(albumId))
   }
 
@@ -106,59 +106,17 @@ const AdminPage = () => {
         removeTag={removeTag}
         submitAlbum={submitAlbum}
         beforeAddTag={beforeAddTag}
+        setEditTarget={setEditTarget}
       />
-
-      <h3 className="mb-3 mt-3">current stock: </h3>
-      <Table
-        responsive
-        striped
-        style={{
-          backgroundColor: 'white',
-          padding: '10px',
-          borderRadius: '10px 10px 0px 0px'
-        }}>
-        <thead>
-          <tr>
-            <th>artist</th>
-            <th>album</th>
-            <th>price</th>
-            <th>stock</th>
-            <th>tags</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.map((album) => {
-            const { artistName, albumId, albumName, price, stock, tags } = album
-            return (
-              <tr key={albumId}>
-                <td>{artistName}</td>
-                <td>{albumName}</td>
-                <td>{price}</td>
-                <td>{stock}</td>
-                <td>{tags.join(', ')}</td>
-                <td>
-                  <Button
-                    onClick={() => {
-                      setEditTarget(albumId)
-                      setTags(tags)
-                    }}>
-                    Edit
-                  </Button>
-                </td>
-                <td>
-                  <Button
-                    variant="danger"
-                    onClick={() => {
-                      removeAlbum(albumId!)
-                    }}>
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </Table>
+      {data !== null && (
+        <AdminTable
+          albums={data}
+          editTarget={editTarget}
+          setEditTarget={setEditTarget}
+          setTags={setTags}
+          removeAlbum={removeAlbum}
+        />
+      )}
     </>
   )
 }
