@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button'
 const AlbumCard = ({ album, children, query, detailed, tagToQuery }: TAlbumCard) => {
   const { albumName, artistName, stock, price, tags, albumId, description } = album
 
-  const title = `${artistName} ${albumName}`
+  const title = `${artistName} - ${albumName}`
   const colSize = detailed ? { span: 6, offset: 3 } : '4'
   const paddingClass = detailed ? 'mt-3' : 'mb-3'
 

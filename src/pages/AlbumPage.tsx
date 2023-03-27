@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFilter } from '../features/filter/filterSlice'
-import { AppDispatch, TAppState, TPurchase } from '../types/types'
+import { AppDispatch, TAlbum, TAppState, TPurchase } from '../types/types'
 import { addToCart, removeFromCart } from '../features/cart/cartSlice'
 import { decrementStock, incrementStock } from '../features/albums/albumSlice'
 
@@ -28,25 +28,28 @@ const AlbumPage = () => {
   const album = data !== null ? data?.find((album) => album.albumId === albumId) : null
   const isInCart =
     purchases !== null ? purchases.some((purchase) => purchase.albumId === albumId) : false
-  let albumName: string, artistName: string, price: number, stock: number
+
   const validAlbum = album !== null && album !== undefined
 
-  if (validAlbum) {
-    ;({ albumName, artistName, price, stock } = album!)
-  }
-
-  const putInCart = (purchase: TPurchase) => {
-    const { albumId } = purchase
-    dispatch(addToCart(purchase))
+  const putInCart = (album: TAlbum) => {
+    const { albumId, artistName, albumName, price } = album
+    const newPurchase = {
+      albumId: albumId!,
+      artistName: artistName,
+      albumName: albumName,
+      quantity: 1,
+      cost: price
+    }
+    dispatch(addToCart(newPurchase))
     dispatch(decrementStock({ albumId: albumId }))
   }
 
-  const outFromCart = (purchaseParams: Pick<TPurchase, 'albumId' | 'cost'>) => {
-    const { albumId, cost } = purchaseParams
+  const outFromCart = (album: TAlbum) => {
+    const { albumId, price } = album
     dispatch(
       removeFromCart({
         albumId: albumId,
-        cost: cost
+        cost: price
       })
     )
     dispatch(incrementStock({ albumId: albumId }))
@@ -68,15 +71,9 @@ const AlbumPage = () => {
               style={{ marginRight: '2px' }}
               size="sm"
               variant="primary"
-              disabled={email === null || stock! === 0}
+              disabled={email === null || album.stock! === 0}
               onClick={() => {
-                putInCart({
-                  albumId: albumId!,
-                  quantity: 1,
-                  artistName: artistName,
-                  albumName: albumName,
-                  cost: price
-                })
+                putInCart(album)
               }}>
               Add to Cart
             </Button>
@@ -85,10 +82,7 @@ const AlbumPage = () => {
               variant="danger"
               disabled={email === null || !isInCart}
               onClick={() => {
-                outFromCart({
-                  albumId: albumId!,
-                  cost: price
-                })
+                outFromCart(album)
               }}>
               Remove from Cart
             </Button>
