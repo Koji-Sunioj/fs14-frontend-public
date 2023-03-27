@@ -2,7 +2,7 @@ import { TAlbumsState } from '../../types/types'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 export const fetchAlbums = createAsyncThunk('fetch-albums', async () => {
-  const request = await fetch('/albumss.json')
+  const request = await fetch('/albums.json')
   const response = await request.json()
   if (!request.ok) {
     const { message } = response
