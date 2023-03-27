@@ -16,6 +16,7 @@ import AlbumPagination from '../components/AlbumPagination'
 const HomePage = () => {
   const {
     albums: { data, loading, error, message },
+    filter: { query },
     filter
   } = useSelector((state: TAppState) => state)
   const dispatch = useDispatch<AppDispatch>()
@@ -89,7 +90,13 @@ const HomePage = () => {
       {sortedAlbums !== null && (
         <Row>
           {sortedAlbums.map((album) => (
-            <AlbumCard tagToQuery={tagToQuery} album={album} key={album.albumId} />
+            <AlbumCard
+              detailed={false}
+              query={query!}
+              tagToQuery={tagToQuery}
+              album={album}
+              key={album.albumId}
+            />
           ))}
         </Row>
       )}

@@ -13,6 +13,9 @@ import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
 
+import AccountCart from '../components/AccountCart'
+import AccountOrders from '../components/AccountOrders'
+
 const MyAccount = () => {
   const {
     user: { email, givenName, familyName },
@@ -38,74 +41,15 @@ const MyAccount = () => {
     dispatch(resetCart())
   }
 
-  const shouldRender = data !== null
-
   return (
     <>
       <h2 className="mb-3 mt-3">
         Hello {givenName} {familyName}
       </h2>
       {purchases.length > 0 && (
-        <>
-          <h3>Your cart</h3>
-          <Row>
-            <Col className="mb-3" lg="6">
-              <Card>
-                <Card.Body>
-                  {purchases.map((purchase) => {
-                    const { artistName, albumName, quantity, cost, albumId } = purchase
-                    return (
-                      <Card.Text style={{ flex: '3' }} key={albumId}>
-                        <Link to={`/album/${albumId}`}>
-                          {artistName} - {albumName}
-                        </Link>{' '}
-                        x {quantity} = &euro;
-                        {cost.toFixed(2)}
-                      </Card.Text>
-                    )
-                  })}
-                  <Card.Text>
-                    total: &euro;
-                    {purchases.reduce((sum, purchase) => sum + purchase.cost, 0).toFixed(2)}
-                  </Card.Text>
-                  <Button disabled={data === null} onClick={checkOutPurchases}>
-                    Checkout
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </>
+        <AccountCart purchases={purchases} checkOutPurchases={checkOutPurchases} />
       )}
-      {shouldRender && (
-        <>
-          <h3>Your orders</h3>
-          <Row>
-            {data?.map((order) => {
-              const { orderId, purchaseDate, albums } = order
-              const total = albums.reduce((sum, purchase) => sum + purchase.cost, 0).toFixed(2)
-              const localDate = new Date(purchaseDate).toLocaleString()
-              return (
-                <Col lg="6" className="mb-3" key={orderId}>
-                  <Card>
-                    <Card.Body>
-                      <Card.Title>order id: {orderId}</Card.Title>
-                      <Card.Text>date: {localDate}</Card.Text>
-                      {albums.map((album) => (
-                        <Card.Text key={album.albumId}>
-                          {album.artistName} - {album.albumName} x {album.quantity} = &euro;
-                          {album.cost.toFixed(2)}
-                        </Card.Text>
-                      ))}
-                      <Card.Text>total: &euro;{total}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              )
-            })}
-          </Row>
-        </>
-      )}
+      {data !== null && <AccountOrders orders={data} />}
       {error && <Alert variant="danger">{message}</Alert>}
       {loading && <Spinner animation="grow" variant="primary" />}
     </>

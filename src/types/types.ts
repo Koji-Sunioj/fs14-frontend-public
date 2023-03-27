@@ -70,6 +70,15 @@ export type TAlbumPagination = {
   changePage: (page: number) => void
 }
 
+export type TAccountOrders = {
+  orders: TOrder[]
+}
+
+export type TAccountCart = {
+  purchases: TPurchase[]
+  checkOutPurchases: () => void
+}
+
 export type TAlbumQuery = {
   loading: boolean
   filter: TFilterState
@@ -106,5 +115,8 @@ export type TAlbumRows = {
 
 export type TAlbumCard = {
   album: TAlbum
+  query?: string
+  detailed: boolean
+  children?: React.ReactNode
   tagToQuery: (tag: string) => void
 }

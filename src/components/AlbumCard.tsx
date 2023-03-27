@@ -1,32 +1,27 @@
 import { Link } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { addToCart } from '../features/cart/cartSlice'
-import { decrementStock } from '../features/albums/albumSlice'
-import { TAlbumCard, TAppState, AppDispatch } from '../types/types'
+import { TAlbumCard } from '../types/types'
 
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-const AlbumCard = ({ album, tagToQuery }: TAlbumCard) => {
-  const dispatch = useDispatch<AppDispatch>()
-  const {
-    filter: { query },
-    user: { email }
-  } = useSelector((state: TAppState) => state)
-  const { albumName, artistName, stock, price, tags, albumId } = album
+const AlbumCard = ({ album, children, query, detailed, tagToQuery }: TAlbumCard) => {
+  const { albumName, artistName, stock, price, tags, albumId, description } = album
+
+  const title = `${artistName} ${albumName}`
+  const colSize = detailed ? { span: 6, offset: 3 } : '4'
+  const paddingClass = detailed ? 'mt-3' : 'mb-3'
 
   return (
-    <Col lg="4" className="mb-3">
+    <Col lg={colSize} className={paddingClass}>
       <Card>
         <Card.Body>
           <Card.Title as={'h5'}>
-            <Link to={`album/${albumId}`}>
-              {artistName} - {albumName}
-            </Link>
+            {detailed ? title : <Link to={`album/${albumId}`}>{title}</Link>}
           </Card.Title>
           <Card.Text>stock: {stock}</Card.Text>
           <Card.Text>price: &euro;{price.toFixed(2)}</Card.Text>
+          {detailed && <Card.Text>{description!}</Card.Text>}
           <Card.Text>
             {tags.map((tag) => (
               <Button
@@ -42,6 +37,7 @@ const AlbumCard = ({ album, tagToQuery }: TAlbumCard) => {
               </Button>
             ))}
           </Card.Text>
+          {children}
         </Card.Body>
       </Card>
     </Col>
