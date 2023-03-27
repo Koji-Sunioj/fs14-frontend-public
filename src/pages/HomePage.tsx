@@ -96,7 +96,7 @@ const HomePage = () => {
       {shouldLoad && (
         <Row>
           {[0, 1, 2, 3, 4, 5].map((fakeCard) => (
-            <AlbumSkeleton key={fakeCard} />
+            <AlbumSkeleton key={fakeCard} type="list" />
           ))}
         </Row>
       )}

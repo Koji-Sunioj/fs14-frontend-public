@@ -31,7 +31,11 @@ div.card{
     background: black;
     border: 2px solid lightslategray;
 }
+/* 
+.list {
+    width:"100%"
 
+} */
 
 
 .card-body a, p ,h5

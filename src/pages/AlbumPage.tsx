@@ -9,14 +9,17 @@ import { decrementStock, incrementStock } from '../features/albums/albumSlice'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
+import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
+
+import AlbumSkeleton from '../components/AlbumSkeleton'
 
 const AlbumPage = () => {
   const { albumId } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const {
-    albums: { data, error, loading },
+    albums: { data, error, loading, message },
     user: { email },
     cart: { purchases },
     filter
@@ -122,6 +125,14 @@ const AlbumPage = () => {
             </Card.Body>
           </Card>
         </Col>
+      )}
+      {loading && <AlbumSkeleton type="card" />}
+      {error && (
+        <Row>
+          <Col lg={{ span: 6, offset: 3 }} className="mt-3">
+            <Alert variant="danger">{message}</Alert>
+          </Col>
+        </Row>
       )}
       {album === undefined && <h2>No album matches this URL</h2>}
     </Row>

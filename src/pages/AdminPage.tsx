@@ -7,6 +7,8 @@ import AlbumForm from '../components/AlbumForm'
 import AdminTable from '../components/AdminTable'
 
 import { v4 as uuid4 } from 'uuid'
+import Alert from 'react-bootstrap/Alert'
+import Spinner from 'react-bootstrap/Spinner'
 
 const AdminPage = () => {
   const tagRef = useRef<HTMLInputElement>(null)
@@ -14,8 +16,7 @@ const AdminPage = () => {
   const [editTarget, setEditTarget] = useState<string | null>(null)
   const dispatch = useDispatch<AppDispatch>()
   const {
-    albums: { data },
-    filter
+    albums: { data, error, message, loading }
   } = useSelector((state: TAppState) => state)
 
   const submitAlbum = (event: React.FormEvent<HTMLFormElement>) => {
@@ -117,6 +118,12 @@ const AdminPage = () => {
           removeAlbum={removeAlbum}
         />
       )}
+      {error && (
+        <Alert className="mt-3" variant="danger">
+          {message}
+        </Alert>
+      )}
+      {loading && <Spinner animation="grow" variant="primary" />}
     </>
   )
 }

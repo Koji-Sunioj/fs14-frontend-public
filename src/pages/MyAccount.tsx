@@ -9,13 +9,14 @@ import { v4 as uuid4 } from 'uuid'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Card from 'react-bootstrap/Card'
+import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
 
 const MyAccount = () => {
   const {
     user: { email, givenName, familyName },
-    orders: { loading, data, error },
+    orders: { loading, data, error, message },
     cart: { purchases }
   } = useSelector((state: TAppState) => state)
   const dispatch = useDispatch<AppDispatch>()
@@ -105,7 +106,7 @@ const MyAccount = () => {
           </Row>
         </>
       )}
-
+      {error && <Alert variant="danger">{message}</Alert>}
       {loading && <Spinner animation="grow" variant="primary" />}
     </>
   )
