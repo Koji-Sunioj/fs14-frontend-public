@@ -2,12 +2,6 @@
 
 current netlify link: https://darling-syrniki-58d723.netlify.app/
 
-edit 25/3: paginated filtering is handling in the component level, since manipulating the stock (for example, user adds item to cart) requires the albums reducer to have all values present. in reality, the data would be saved to a database, and the ui view of albums is refreshed with a new fetch request.
-
-edit 26/3: new admin created album is will be stored in localstorage for now (one item) since, the app fetches and filters, with every change in the AlbumQuery component (page number, query, etc) thus, the new item will be lost when i store it in the reducer, and change a query parameter. 
-
-these two things might seem a little weird, but i would like the reducer to resemble real REST API requests as much as possible when we start adding the back-end. i might change it, if things don't make sense as time goes on.
-
 # Frontend project
 
 ## Expectation
