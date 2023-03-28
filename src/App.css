@@ -51,11 +51,9 @@ div.table-responsive {
 
 p.card-text, div.card-title.h5, a.card-title {
     margin-bottom:12px
-
 }
 
-button {
-
+button.btn {
     margin: 4px 4px 4px 0px;
 }
 
