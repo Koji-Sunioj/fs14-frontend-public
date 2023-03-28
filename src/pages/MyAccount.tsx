@@ -1,18 +1,12 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, TAppState } from '../types/types'
 import { resetCart } from '../features/cart/cartSlice'
 import { fetchOrders, checkOutOrder } from '../features/orders/ordersSlice'
 
 import { v4 as uuid4 } from 'uuid'
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
-import Card from 'react-bootstrap/Card'
 import Alert from 'react-bootstrap/Alert'
-import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
-
 import AccountCart from '../components/AccountCart'
 import AccountOrders from '../components/AccountOrders'
 

@@ -34,7 +34,7 @@ const AlbumSkeleton = ({ type }: { type: string }) => {
           )}
           <Placeholder as={Card.Text} animation="glow">
             {[0, 1, 2].map((item) => (
-              <Placeholder.Button variant="info" lg={4} style={{ margin: '2px' }} key={item} />
+              <Placeholder.Button variant="info" lg={4} key={item} />
             ))}
           </Placeholder>
         </Card.Body>

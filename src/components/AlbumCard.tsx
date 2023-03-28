@@ -28,7 +28,6 @@ const AlbumCard = ({ album, children, query, detailed, tagToQuery }: TAlbumCard)
                 size="sm"
                 disabled={tag.toLowerCase() === query}
                 variant="info"
-                style={{ margin: '2px 2px 2px 0px' }}
                 key={tag}
                 onClick={() => {
                   tagToQuery(tag)

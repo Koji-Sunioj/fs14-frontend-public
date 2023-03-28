@@ -1,7 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { applyFilter } from '../utils/applyFilter'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchAlbums } from '../features/albums/albumSlice'
 import { TAppState, AppDispatch, TAlbum } from '../types/types'
 import { setFilter, resetFilter } from '../features/filter/filterSlice'
 

@@ -68,7 +68,6 @@ const AlbumPage = () => {
         <AlbumCard tagToQuery={tagToHomeQuery} album={album} detailed={true}>
           <div>
             <Button
-              style={{ marginRight: '2px' }}
               size="sm"
               variant="primary"
               disabled={email === null || album.stock! === 0}

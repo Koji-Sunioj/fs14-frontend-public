@@ -82,7 +82,6 @@ const AlbumForm = ({
             tags.map((tag: string) => (
               <Button
                 key={tag}
-                style={{ margin: '4px 4px 4px 0px' }}
                 variant="info"
                 onClick={() => {
                   removeTag(tag)
@@ -91,10 +90,10 @@ const AlbumForm = ({
               </Button>
             ))}
         </Form.Group>
-        <Button variant="primary" type="submit" style={{ margin: '4px 4px 4px 0px' }}>
+        <Button variant="primary" type="submit">
           Submit
         </Button>
-        <Button type="reset" variant="warning" style={{ margin: '4px 4px 4px 0px' }}>
+        <Button type="reset" variant="warning">
           Reset
         </Button>
         {album !== null && (
