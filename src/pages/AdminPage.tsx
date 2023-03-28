@@ -12,6 +12,7 @@ import Spinner from 'react-bootstrap/Spinner'
 
 const AdminPage = () => {
   const tagRef = useRef<HTMLInputElement>(null)
+  const [albumCopy, setAlbumCopy] = useState<null | Partial<TAlbum>>(null)
   const [tags, setTags] = useState<string[]>([])
   const [editTarget, setEditTarget] = useState<string | null>(null)
   const dispatch = useDispatch<AppDispatch>()
@@ -76,23 +77,63 @@ const AdminPage = () => {
     const {
       currentTarget: { value: tag }
     } = event
-
     if (event.key === 'Enter' && tag.length > 0) {
       const tagCopy = [...tags]
       tagCopy.push(tag)
       setTags(tagCopy)
+      setAlbumCopy({ ...albumCopy, tags: tagCopy })
       tagRef.current!.value = ''
     }
   }
 
   const removeTag = (tag: string) => {
     const tagCopy = tags.filter((stateTag) => stateTag !== tag)
+    setAlbumCopy({ ...albumCopy, tags: tagCopy })
     setTags(tagCopy)
+  }
+
+  const fillForm = (albumId: string, tags: string[]) => {
+    const copy = data!.find((album) => album.albumId)
+    setAlbumCopy(copy!)
+    setEditTarget(albumId)
+    setTags(tags)
+    window.scrollTo(0, 0)
+    ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
   }
 
   const removeAlbum = (albumId: string) => {
     setEditTarget !== null && setEditTarget(null)
     dispatch(adminRemoveAlbum(albumId))
+  }
+
+  const checkSubmittable = (event: any) => {
+    if (editTarget !== null) {
+      const {
+        currentTarget: {
+          artist: { value: artistName },
+          album: { value: albumName },
+          price: { value: price },
+          stock: { value: stock },
+          description: { value: description }
+        }
+      } = event
+      const newAlbum: Partial<TAlbum> = {
+        artistName: artistName,
+        albumName: albumName,
+        description: description,
+        tags: tags
+      }
+
+      if (price.length > 0) {
+        newAlbum.price = Number(price)
+      }
+
+      if (stock.length > 0) {
+        newAlbum.stock = Number(stock)
+      }
+      const newALbumCopy = { ...albumCopy, ...newAlbum }
+      setAlbumCopy(newALbumCopy!)
+    }
   }
 
   const editAlbum = editTarget === null ? null : data?.find((album) => album.albumId === editTarget)
@@ -102,22 +143,16 @@ const AdminPage = () => {
       <AlbumForm
         tags={tags}
         tagRef={tagRef}
+        albumCopy={albumCopy}
         album={editAlbum}
         addTag={addTag}
         removeTag={removeTag}
+        checkSubmittable={checkSubmittable}
         submitAlbum={submitAlbum}
         beforeAddTag={beforeAddTag}
         setEditTarget={setEditTarget}
       />
-      {data !== null && (
-        <AdminTable
-          albums={data}
-          editTarget={editTarget}
-          setEditTarget={setEditTarget}
-          setTags={setTags}
-          removeAlbum={removeAlbum}
-        />
-      )}
+      {data !== null && <AdminTable albums={data} fillForm={fillForm} removeAlbum={removeAlbum} />}
       {error && (
         <Alert className="mt-3" variant="danger">
           {message}

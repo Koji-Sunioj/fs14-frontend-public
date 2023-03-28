@@ -1,4 +1,4 @@
-import { TAlbumForm } from '../types/types'
+import { TAlbumForm, TAlbum } from '../types/types'
 
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -7,11 +7,13 @@ import Button from 'react-bootstrap/Button'
 
 const AlbumForm = ({
   album,
+  albumCopy,
   tags,
   tagRef,
   submitAlbum,
   addTag,
   removeTag,
+  checkSubmittable,
   beforeAddTag,
   setEditTarget
 }: TAlbumForm) => {
@@ -26,11 +28,23 @@ const AlbumForm = ({
   }
 
   const title = album === null ? 'add an album: ' : `edit album ${albumId}: `
+  let sameAsForm: any
+  if (album !== null) {
+    sameAsForm = Object.keys(albumCopy!).some((item) => {
+      const something = albumCopy![item as keyof TAlbum]
+      const something2 = album![item as keyof TAlbum]
+      if (Array.isArray(something) && Array.isArray(something2)) {
+        return something.join(',') !== something2!.join(',')
+      } else {
+        return albumCopy![item as keyof TAlbum] !== album![item as keyof TAlbum]
+      }
+    })
+  }
 
   return (
     <>
       <h3 className="mb-3 mt-3">{title}</h3>
-      <Form id="admin-form" onSubmit={submitAlbum}>
+      <Form id="admin-form" onSubmit={submitAlbum} onChange={checkSubmittable}>
         <Form.Group className="mb-3">
           <Row>
             <Col lg="6">
@@ -65,7 +79,13 @@ const AlbumForm = ({
           <Row>
             <Col lg="4">
               <Form.Label>Tags</Form.Label>
-              <Form.Control onKeyUp={addTag} onKeyDown={beforeAddTag} type="text" ref={tagRef} />
+              <Form.Control
+                onKeyUp={addTag}
+                name="tags"
+                onKeyDown={beforeAddTag}
+                type="text"
+                ref={tagRef}
+              />
             </Col>
             <Col lg="4">
               <Form.Label>Stock</Form.Label>
@@ -90,7 +110,11 @@ const AlbumForm = ({
               </Button>
             ))}
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={album !== null && !sameAsForm}
+          id="form-submit">
           Submit
         </Button>
         <Button type="reset" variant="warning">

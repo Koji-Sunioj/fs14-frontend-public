@@ -13,7 +13,7 @@ const AccountOrders = ({ orders }: TAccountOrders) => (
         const total = albums.reduce((sum, purchase) => sum + purchase.cost, 0).toFixed(2)
         const localDate = new Date(purchaseDate).toLocaleString()
         return (
-          <Col lg="6" className="mb-3" key={orderId}>
+          <Col lg="6" className="mb-3 fade-in" key={orderId}>
             <Card>
               <Card.Body>
                 <Card.Title>order id: {orderId}</Card.Title>

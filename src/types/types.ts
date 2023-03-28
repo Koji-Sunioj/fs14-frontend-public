@@ -91,20 +91,20 @@ export type TAlbumQuery = {
 export type TAlbumForm = {
   tags: string[]
   album?: null | TAlbum
+  albumCopy: Partial<TAlbum> | null
   tagRef: React.RefObject<HTMLInputElement>
   removeTag: (tag: string) => void
   submitAlbum: (event: React.FormEvent<HTMLFormElement>) => void
   addTag: (event: React.KeyboardEvent<HTMLInputElement>) => void
+  checkSubmittable: (event: React.ChangeEvent<HTMLFormElement>) => void
   beforeAddTag: (event: React.KeyboardEvent<HTMLInputElement>) => void
   setEditTarget: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 export type TAdminTable = {
   albums: TAlbum[]
-  editTarget: string | null
   removeAlbum: (tag: string) => void
-  setTags: React.Dispatch<React.SetStateAction<string[]>>
-  setEditTarget: React.Dispatch<React.SetStateAction<string | null>>
+  fillForm: (albumId: string, tags: string[]) => void
 }
 
 export type TAlbumRows = {
