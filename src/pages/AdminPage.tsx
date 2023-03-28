@@ -11,60 +11,34 @@ import Alert from 'react-bootstrap/Alert'
 import Spinner from 'react-bootstrap/Spinner'
 
 const AdminPage = () => {
-  const tagRef = useRef<HTMLInputElement>(null)
-  const [albumCopy, setAlbumCopy] = useState<null | Partial<TAlbum>>(null)
-  const [tags, setTags] = useState<string[]>([])
-  const [editTarget, setEditTarget] = useState<string | null>(null)
-  const dispatch = useDispatch<AppDispatch>()
   const {
     albums: { data, error, message, loading }
   } = useSelector((state: TAppState) => state)
+  const tagRef = useRef<HTMLInputElement>(null)
+  const [tags, setTags] = useState<string[]>([])
+  const [editTarget, setEditTarget] = useState<string | null>(null)
+  const [albumCopy, setAlbumCopy] = useState<null | Partial<TAlbum>>(null)
+  const dispatch = useDispatch<AppDispatch>()
 
   const submitAlbum = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const {
-      currentTarget: {
-        artist: { value: artistName },
-        album: { value: albumName },
-        price: { value: price },
-        stock: { value: stock },
-        description: { value: description }
-      }
-    } = event
-
-    const validForm = [artistName, albumName, description, price, stock, tags.join(',')].every(
-      (field) => field.length > 0 && !isNaN(price) && !isNaN(stock)
-    )
-
-    if (validForm) {
-      const newAlbum: Partial<TAlbum> = {
-        albumId: undefined,
-        artistName: artistName,
-        albumName: albumName,
-        description: description,
-        price: Number(price),
-        stock: Number(stock),
-        tags: tags
-      }
-
-      const flow = editTarget === null ? 'add' : 'edit'
-
-      switch (flow) {
-        case 'add':
-          newAlbum.albumId = uuid4()
-          dispatch(adminAddAlbum(newAlbum))
-          break
-        case 'edit':
-          newAlbum.albumId = editTarget!
-          dispatch(adminPatchAlbum(newAlbum))
-          break
-        default:
-          return null
-      }
-      flow === 'edit' && setEditTarget(null)
-      setTags([])
-      ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
+    const flow = editTarget === null ? 'add' : 'edit'
+    switch (flow) {
+      case 'add':
+        const newAlbum = { ...albumCopy }
+        newAlbum.albumId = uuid4()
+        dispatch(adminAddAlbum(newAlbum))
+        break
+      case 'edit':
+        setEditTarget(null)
+        dispatch(adminPatchAlbum(albumCopy))
+        break
+      default:
+        return null
     }
+    setTags([])
+    setAlbumCopy(null)
+    ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
   }
 
   const beforeAddTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -93,7 +67,7 @@ const AdminPage = () => {
   }
 
   const fillForm = (albumId: string, tags: string[]) => {
-    const copy = data!.find((album) => album.albumId)
+    const copy = data!.find((album) => album.albumId === albumId)
     setAlbumCopy(copy!)
     setEditTarget(albumId)
     setTags(tags)
@@ -102,38 +76,30 @@ const AdminPage = () => {
   }
 
   const removeAlbum = (albumId: string) => {
-    setEditTarget !== null && setEditTarget(null)
+    editTarget !== null && setEditTarget(null)
     dispatch(adminRemoveAlbum(albumId))
   }
 
-  const checkSubmittable = (event: any) => {
-    if (editTarget !== null) {
-      const {
-        currentTarget: {
-          artist: { value: artistName },
-          album: { value: albumName },
-          price: { value: price },
-          stock: { value: stock },
-          description: { value: description }
-        }
-      } = event
-      const newAlbum: Partial<TAlbum> = {
-        artistName: artistName,
-        albumName: albumName,
-        description: description,
-        tags: tags
+  const checkSubmittable = (event: React.ChangeEvent<HTMLFormElement>) => {
+    const {
+      currentTarget: {
+        artist: { value: artistName },
+        album: { value: albumName },
+        price: { value: price },
+        stock: { value: stock },
+        description: { value: description }
       }
-
-      if (price.length > 0) {
-        newAlbum.price = Number(price)
-      }
-
-      if (stock.length > 0) {
-        newAlbum.stock = Number(stock)
-      }
-      const newALbumCopy = { ...albumCopy, ...newAlbum }
-      setAlbumCopy(newALbumCopy!)
+    } = event
+    const newAlbum: Partial<TAlbum> = {
+      artistName: artistName,
+      albumName: albumName,
+      description: description,
+      tags: tags,
+      price: price.length > 0 ? Number(price) : null,
+      stock: stock.length > 0 ? Number(stock) : null
     }
+    const newALbumCopy = { ...albumCopy, ...newAlbum }
+    setAlbumCopy(newALbumCopy!)
   }
 
   const editAlbum = editTarget === null ? null : data?.find((album) => album.albumId === editTarget)

@@ -1,4 +1,5 @@
 import { TAlbumForm, TAlbum } from '../types/types'
+import { compareCopy, checkNullOREmptyStr } from '../utils/compareCopy'
 
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -20,26 +21,20 @@ const AlbumForm = ({
   let artistName = '',
     albumName = '',
     description = '',
-    price: string | number = '',
-    stock: string | number = '',
+    price: number | null = 0,
+    stock: number | null = 0,
     albumId = ''
   if (album !== null) {
     ;({ artistName, albumName, description, price, stock, albumId } = album!)
   }
 
   const title = album === null ? 'add an album: ' : `edit album ${albumId}: `
-  let sameAsForm: any
-  if (album !== null) {
-    sameAsForm = Object.keys(albumCopy!).some((item) => {
-      const something = albumCopy![item as keyof TAlbum]
-      const something2 = album![item as keyof TAlbum]
-      if (Array.isArray(something) && Array.isArray(something2)) {
-        return something.join(',') !== something2!.join(',')
-      } else {
-        return albumCopy![item as keyof TAlbum] !== album![item as keyof TAlbum]
-      }
-    })
-  }
+
+  const isAnyFalseOrNull = albumCopy === null ? true : checkNullOREmptyStr(albumCopy!)
+  const sameAsForm = album !== null ? compareCopy(albumCopy!, album!) : false
+  // if (album !== null) {
+  //   sameAsForm = compareCopy(albumCopy!, album!)
+  // }
 
   return (
     <>
@@ -89,11 +84,11 @@ const AlbumForm = ({
             </Col>
             <Col lg="4">
               <Form.Label>Stock</Form.Label>
-              <Form.Control type="text" name="stock" defaultValue={stock} />
+              <Form.Control type="text" name="stock" defaultValue={stock!} />
             </Col>
             <Col lg="4">
               <Form.Label>Price</Form.Label>
-              <Form.Control type="text" name="price" defaultValue={price} />
+              <Form.Control type="text" name="price" defaultValue={price!} />
             </Col>
           </Row>
         </Form.Group>
@@ -113,13 +108,13 @@ const AlbumForm = ({
         <Button
           variant="primary"
           type="submit"
-          disabled={album !== null && !sameAsForm}
+          disabled={(album !== null && !sameAsForm) || isAnyFalseOrNull}
           id="form-submit">
           Submit
         </Button>
-        <Button type="reset" variant="warning">
+        {/* <Button type="reset" variant="warning">
           Reset
-        </Button>
+        </Button> */}
         {album !== null && (
           <Button
             variant="success"

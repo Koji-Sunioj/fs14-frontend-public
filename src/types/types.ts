@@ -57,9 +57,9 @@ export type TAlbum = {
   albumId: string
   albumName: string
   artistName: string
-  price: number
+  price: number | null
   description: string
-  stock: number
+  stock: number | null
   tags: string[]
 }
 
