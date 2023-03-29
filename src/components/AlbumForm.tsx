@@ -73,11 +73,11 @@ const AlbumForm = ({
             </Col>
             <Col lg="4">
               <Form.Label>Stock</Form.Label>
-              <Form.Control type="text" name="stock" value={stock!} />
+              <Form.Control type="number" name="stock" value={stock!} />
             </Col>
             <Col lg="4">
               <Form.Label>Price</Form.Label>
-              <Form.Control type="text" name="price" value={price!} />
+              <Form.Control type="number" name="price" value={price!} />
             </Col>
           </Row>
         </Form.Group>

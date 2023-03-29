@@ -4,6 +4,14 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 
 const AdminTable = ({ albums, fillForm, removeAlbum }: TAdminTable) => {
+  // setTimeout(() => {
+  //   console.log('running')
+  //   const something = document.getElementsByTagName('tbody')[0].children
+  //   Array.from(something).forEach((item) => {
+  //     item.classList.remove('fade-in')
+  //   })
+  // }, 3000)
+
   return (
     <>
       <h3 className="mb-3 mt-3">current stock: </h3>
@@ -23,8 +31,9 @@ const AdminTable = ({ albums, fillForm, removeAlbum }: TAdminTable) => {
           {albums?.map((album) => {
             const { artistName, albumId, albumName, price, stock, tags } = album
             const buttonId = `button-${albumId}`
+            const rowId = `row-${albumId}`
             return (
-              <tr key={albumId} className="fade-in">
+              <tr key={albumId} className="fade-in" id={rowId}>
                 <td>{artistName}</td>
                 <td>{albumName}</td>
                 <td>{price}</td>

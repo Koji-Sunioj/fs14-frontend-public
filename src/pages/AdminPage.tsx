@@ -37,12 +37,18 @@ const AdminPage = () => {
         dispatch(adminAddAlbum(newAlbum))
         break
       case 'edit':
+        const rowClass = document.getElementById(`row-${albumCopy!.albumId}`)?.classList
+        rowClass!.remove('fade-in')
+        setTimeout(() => {
+          rowClass!.add('fade-in')
+        }, 50)
         setEditTarget(null)
         dispatch(adminPatchAlbum(albumCopy))
         break
       default:
         return null
     }
+
     flushForm()
   }
 
@@ -84,8 +90,13 @@ const AdminPage = () => {
   }
 
   const removeAlbum = (albumId: string) => {
-    editTarget !== null && flushForm()
-    dispatch(adminRemoveAlbum(albumId))
+    const rowClass = document.getElementById(`row-${albumId}`)?.classList
+    rowClass!.add('fade-out')
+    setTimeout(() => {
+      editTarget !== null && flushForm()
+      rowClass!.remove('fade-out')
+      dispatch(adminRemoveAlbum(albumId))
+    }, 400)
   }
 
   const checkSubmittable = (event: React.ChangeEvent<HTMLFormElement>) => {
