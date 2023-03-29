@@ -98,7 +98,8 @@ export type TAlbumForm = {
   addTag: (event: React.KeyboardEvent<HTMLInputElement>) => void
   checkSubmittable: (event: React.ChangeEvent<HTMLFormElement>) => void
   beforeAddTag: (event: React.KeyboardEvent<HTMLInputElement>) => void
-  setEditTarget: React.Dispatch<React.SetStateAction<string | null>>
+  flushForm: () => void
+  resetForm: () => void
 }
 
 export type TAdminTable = {

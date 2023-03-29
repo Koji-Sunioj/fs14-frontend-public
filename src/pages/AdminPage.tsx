@@ -17,7 +17,14 @@ const AdminPage = () => {
   const tagRef = useRef<HTMLInputElement>(null)
   const [tags, setTags] = useState<string[]>([])
   const [editTarget, setEditTarget] = useState<string | null>(null)
-  const [albumCopy, setAlbumCopy] = useState<null | Partial<TAlbum>>(null)
+  const initAlbum = {
+    artistName: '',
+    albumName: '',
+    description: '',
+    price: 0,
+    stock: 0
+  }
+  const [albumCopy, setAlbumCopy] = useState<null | Partial<TAlbum>>(initAlbum)
   const dispatch = useDispatch<AppDispatch>()
 
   const submitAlbum = (event: React.FormEvent<HTMLFormElement>) => {
@@ -36,9 +43,7 @@ const AdminPage = () => {
       default:
         return null
     }
-    setTags([])
-    setAlbumCopy(null)
-    ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
+    flushForm()
   }
 
   const beforeAddTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -72,11 +77,14 @@ const AdminPage = () => {
     setEditTarget(albumId)
     setTags(tags)
     window.scrollTo(0, 0)
+    document.getElementById(`button-${albumId}`)?.setAttribute('disabled', 'true')
+    editTarget !== null &&
+      document.getElementById(`button-${editTarget}`)?.removeAttribute('disabled')
     ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
   }
 
   const removeAlbum = (albumId: string) => {
-    editTarget !== null && setEditTarget(null)
+    editTarget !== null && flushForm()
     dispatch(adminRemoveAlbum(albumId))
   }
 
@@ -98,11 +106,33 @@ const AdminPage = () => {
       price: price.length > 0 ? Number(price) : null,
       stock: stock.length > 0 ? Number(stock) : null
     }
+
     const newALbumCopy = { ...albumCopy, ...newAlbum }
     setAlbumCopy(newALbumCopy!)
   }
 
+  const flushForm = () => {
+    if (editTarget !== null) {
+      document.getElementById(`button-${editTarget}`)?.removeAttribute('disabled')
+      setEditTarget(null)
+    }
+    setTags([])
+    setAlbumCopy(initAlbum)
+    ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
+  }
+
   const editAlbum = editTarget === null ? null : data?.find((album) => album.albumId === editTarget)
+
+  const resetForm = () => {
+    if (editTarget !== null) {
+      setTags(editAlbum!.tags)
+      setAlbumCopy(editAlbum!)
+    } else {
+      setAlbumCopy(initAlbum)
+      setTags([])
+    }
+    ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
+  }
 
   return (
     <>
@@ -116,7 +146,8 @@ const AdminPage = () => {
         checkSubmittable={checkSubmittable}
         submitAlbum={submitAlbum}
         beforeAddTag={beforeAddTag}
-        setEditTarget={setEditTarget}
+        flushForm={flushForm}
+        resetForm={resetForm}
       />
       {data !== null && <AdminTable albums={data} fillForm={fillForm} removeAlbum={removeAlbum} />}
       {error && (

@@ -14,27 +14,16 @@ const AlbumForm = ({
   submitAlbum,
   addTag,
   removeTag,
+  resetForm,
   checkSubmittable,
   beforeAddTag,
-  setEditTarget
+  flushForm
 }: TAlbumForm) => {
-  let artistName = '',
-    albumName = '',
-    description = '',
-    price: number | null = 0,
-    stock: number | null = 0,
-    albumId = ''
-  if (album !== null) {
-    ;({ artistName, albumName, description, price, stock, albumId } = album!)
-  }
+  const { artistName, albumName, description, price, stock } = albumCopy!
 
-  const title = album === null ? 'add an album: ' : `edit album ${albumId}: `
-
+  const title = album === null ? 'add an album: ' : `edit album ${album!.albumId}: `
   const isAnyFalseOrNull = albumCopy === null ? true : checkNullOREmptyStr(albumCopy!)
   const sameAsForm = album !== null ? compareCopy(albumCopy!, album!) : false
-  // if (album !== null) {
-  //   sameAsForm = compareCopy(albumCopy!, album!)
-  // }
 
   return (
     <>
@@ -47,7 +36,7 @@ const AlbumForm = ({
               <Form.Control
                 placeholder="Wu Tang Clan, Katy Perry..."
                 name="artist"
-                defaultValue={artistName}
+                value={artistName}
               />
             </Col>
             <Col lg="6">
@@ -55,7 +44,7 @@ const AlbumForm = ({
               <Form.Control
                 placeholder="Stillmatic, Merry Christmas..."
                 name="album"
-                defaultValue={albumName}
+                value={albumName}
               />
             </Col>
           </Row>
@@ -63,7 +52,7 @@ const AlbumForm = ({
         <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
           <Form.Control
-            defaultValue={description}
+            value={description}
             as="textarea"
             rows={3}
             placeholder="Iron maiden's second album, was very influential.."
@@ -84,11 +73,11 @@ const AlbumForm = ({
             </Col>
             <Col lg="4">
               <Form.Label>Stock</Form.Label>
-              <Form.Control type="text" name="stock" defaultValue={stock!} />
+              <Form.Control type="text" name="stock" value={stock!} />
             </Col>
             <Col lg="4">
               <Form.Label>Price</Form.Label>
-              <Form.Control type="text" name="price" defaultValue={price!} />
+              <Form.Control type="text" name="price" value={price!} />
             </Col>
           </Row>
         </Form.Group>
@@ -112,15 +101,11 @@ const AlbumForm = ({
           id="form-submit">
           Submit
         </Button>
-        {/* <Button type="reset" variant="warning">
+        <Button variant="warning" type="reset" onClick={resetForm}>
           Reset
-        </Button> */}
+        </Button>
         {album !== null && (
-          <Button
-            variant="success"
-            onClick={() => {
-              setEditTarget(null)
-            }}>
+          <Button variant="success" onClick={flushForm}>
             New album mode
           </Button>
         )}
