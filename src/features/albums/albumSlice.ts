@@ -39,12 +39,12 @@ export const albumSlice = createSlice({
     decrementStock: (state, action) => {
       const { albumId } = action.payload
       const index = state.data!.findIndex((album) => album.albumId === albumId)
-      state.data![index].stock--
+      state.data![index].stock!--
     },
     incrementStock: (state, action) => {
       const { albumId } = action.payload
       const index = state.data!.findIndex((album) => album.albumId === albumId)
-      state.data![index].stock++
+      state.data![index].stock!++
     }
   },
   extraReducers(builder) {

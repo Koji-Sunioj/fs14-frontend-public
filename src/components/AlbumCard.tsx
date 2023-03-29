@@ -20,7 +20,7 @@ const AlbumCard = ({ album, children, query, detailed, tagToQuery }: TAlbumCard)
             {detailed ? title : <Link to={`album/${albumId}`}>{title}</Link>}
           </Card.Title>
           <Card.Text>stock: {stock}</Card.Text>
-          <Card.Text>price: &euro;{price.toFixed(2)}</Card.Text>
+          <Card.Text>price: &euro;{price!.toFixed(2)}</Card.Text>
           {detailed && <Card.Text>{description!}</Card.Text>}
           <Card.Text>
             {tags.map((tag) => (
