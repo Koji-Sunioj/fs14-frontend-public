@@ -4,14 +4,6 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 
 const AdminTable = ({ albums, fillForm, removeAlbum }: TAdminTable) => {
-  // setTimeout(() => {
-  //   console.log('running')
-  //   const something = document.getElementsByTagName('tbody')[0].children
-  //   Array.from(something).forEach((item) => {
-  //     item.classList.remove('fade-in')
-  //   })
-  // }, 3000)
-
   return (
     <>
       <h3 className="mb-3 mt-3">current stock: </h3>
@@ -52,7 +44,7 @@ const AdminTable = ({ albums, fillForm, removeAlbum }: TAdminTable) => {
                   <Button
                     variant="danger"
                     onClick={() => {
-                      removeAlbum(albumId!)
+                      removeAlbum(albumId)
                     }}>
                     Delete
                   </Button>

@@ -1,4 +1,4 @@
-import { TAlbumForm, TAlbum } from '../types/types'
+import { TAlbumForm } from '../types/types'
 import { compareCopy, checkNullOREmptyStr } from '../utils/compareCopy'
 
 import Row from 'react-bootstrap/Row'
@@ -9,7 +9,6 @@ import Button from 'react-bootstrap/Button'
 const AlbumForm = ({
   album,
   albumCopy,
-  tags,
   tagRef,
   submitAlbum,
   addTag,
@@ -19,11 +18,15 @@ const AlbumForm = ({
   beforeAddTag,
   flushForm
 }: TAlbumForm) => {
-  const { artistName, albumName, description, price, stock } = albumCopy!
+  const { artistName, albumName, description, price, stock, tags } = albumCopy!
 
-  const title = album === null ? 'add an album: ' : `edit album ${album!.albumId}: `
-  const isAnyFalseOrNull = albumCopy === null ? true : checkNullOREmptyStr(albumCopy!)
-  const sameAsForm = album !== null ? compareCopy(albumCopy!, album!) : false
+  let title = 'add an album: ',
+    sameAsForm = false
+  if (album !== null) {
+    sameAsForm = compareCopy(albumCopy!, album!)
+    title = `edit album ${album!.albumId}: `
+  }
+  const isAnyFalseOrNull = albumCopy === null ? true : checkNullOREmptyStr(albumCopy)
 
   return (
     <>
@@ -82,8 +85,8 @@ const AlbumForm = ({
           </Row>
         </Form.Group>
         <Form.Group className="mb-3">
-          {tags.length > 0 &&
-            tags.map((tag: string) => (
+          {tags!.length > 0 &&
+            tags!.map((tag: string) => (
               <Button
                 key={tag}
                 variant="info"

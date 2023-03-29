@@ -57,10 +57,16 @@ export type TAlbum = {
   albumId: string
   albumName: string
   artistName: string
-  price: number | null
+  price: number
   description: string
-  stock: number | null
+  stock: number
   tags: string[]
+}
+
+export type TAdminForm = Omit<TAlbum, 'price' | 'stock' | 'albumId'> & {
+  albumId?: string
+  price: null | number
+  stock: null | number
 }
 
 export type TAlbumPagination = {
@@ -89,9 +95,8 @@ export type TAlbumQuery = {
 }
 
 export type TAlbumForm = {
-  tags: string[]
   album?: null | TAlbum
-  albumCopy: Partial<TAlbum> | null
+  albumCopy: TAdminForm
   tagRef: React.RefObject<HTMLInputElement>
   removeTag: (tag: string) => void
   submitAlbum: (event: React.FormEvent<HTMLFormElement>) => void

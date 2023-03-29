@@ -17,9 +17,7 @@ export const applyFilter = (filter: TFilterState, albums: TAlbum[]) => {
   const key = sortField as keyof TAlbum
   const next = direction === 'ascending' ? 1 : -1
   const prev = next === 1 ? -1 : 1
-  albumsCopy.sort((a: TAlbum, b: TAlbum) =>
-    a[key]! > b[key]! ? next : b[key!]! > a[key]! ? prev : 0
-  )
+  albumsCopy.sort((a: TAlbum, b: TAlbum) => (a[key] > b[key] ? next : b[key] > a[key] ? prev : 0))
   albumsCopy = albumsCopy.slice(page * 9 - 9, page * 9)
 
   return {

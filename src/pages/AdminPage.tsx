@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { AppDispatch, TAppState, TAlbum } from '../types/types'
+import { AppDispatch, TAppState, TAlbum, TAdminForm } from '../types/types'
 import { adminRemoveAlbum, adminAddAlbum, adminPatchAlbum } from '../features/albums/albumSlice'
 
 import AlbumForm from '../components/AlbumForm'
@@ -15,16 +15,16 @@ const AdminPage = () => {
     albums: { data, error, message, loading }
   } = useSelector((state: TAppState) => state)
   const tagRef = useRef<HTMLInputElement>(null)
-  const [tags, setTags] = useState<string[]>([])
   const [editTarget, setEditTarget] = useState<string | null>(null)
   const initAlbum = {
     artistName: '',
     albumName: '',
     description: '',
     price: 0,
-    stock: 0
+    stock: 0,
+    tags: []
   }
-  const [albumCopy, setAlbumCopy] = useState<null | Partial<TAlbum>>(initAlbum)
+  const [albumCopy, setAlbumCopy] = useState<TAdminForm>(initAlbum!)
   const dispatch = useDispatch<AppDispatch>()
 
   const submitAlbum = (event: React.FormEvent<HTMLFormElement>) => {
@@ -63,25 +63,22 @@ const AdminPage = () => {
       currentTarget: { value: tag }
     } = event
     if (event.key === 'Enter' && tag.length > 0) {
-      const tagCopy = [...tags]
+      const tagCopy = albumCopy.tags!
       tagCopy.push(tag)
-      setTags(tagCopy)
-      setAlbumCopy({ ...albumCopy, tags: tagCopy })
+      setAlbumCopy({ ...albumCopy!, tags: tagCopy })
       tagRef.current!.value = ''
     }
   }
 
   const removeTag = (tag: string) => {
-    const tagCopy = tags.filter((stateTag) => stateTag !== tag)
-    setAlbumCopy({ ...albumCopy, tags: tagCopy })
-    setTags(tagCopy)
+    const tagCopy = albumCopy.tags!.filter((stateTag) => stateTag !== tag)
+    setAlbumCopy({ ...albumCopy!, tags: tagCopy })
   }
 
   const fillForm = (albumId: string, tags: string[]) => {
     const copy = data!.find((album) => album.albumId === albumId)
     setAlbumCopy(copy!)
     setEditTarget(albumId)
-    setTags(tags)
     window.scrollTo(0, 0)
     document.getElementById(`button-${albumId}`)?.setAttribute('disabled', 'true')
     editTarget !== null &&
@@ -109,11 +106,11 @@ const AdminPage = () => {
         description: { value: description }
       }
     } = event
-    const newAlbum: Partial<TAlbum> = {
+
+    const newAlbum = {
       artistName: artistName,
       albumName: albumName,
       description: description,
-      tags: tags,
       price: price.length > 0 ? Number(price) : null,
       stock: stock.length > 0 ? Number(stock) : null
     }
@@ -127,7 +124,7 @@ const AdminPage = () => {
       document.getElementById(`button-${editTarget}`)?.removeAttribute('disabled')
       setEditTarget(null)
     }
-    setTags([])
+
     setAlbumCopy(initAlbum)
     ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
   }
@@ -136,11 +133,9 @@ const AdminPage = () => {
 
   const resetForm = () => {
     if (editTarget !== null) {
-      setTags(editAlbum!.tags)
       setAlbumCopy(editAlbum!)
     } else {
       setAlbumCopy(initAlbum)
-      setTags([])
     }
     ;(document.getElementById('admin-form')! as HTMLFormElement).reset()
   }
@@ -148,7 +143,6 @@ const AdminPage = () => {
   return (
     <>
       <AlbumForm
-        tags={tags}
         tagRef={tagRef}
         albumCopy={albumCopy}
         album={editAlbum}

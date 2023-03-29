@@ -70,7 +70,7 @@ p.card-text, div.card-title.h5, a.card-title {
     margin-bottom:12px
 }
 
-button.btn:not(div.navbar-nav > button.btn.btn-light) {
+button.btn:not(div.navbar-nav > button.btn.btn-light):not(div.input-group > button) {
     margin: 4px 4px 4px 0px;
 }
 
