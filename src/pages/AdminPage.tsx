@@ -63,7 +63,7 @@ const AdminPage = () => {
       currentTarget: { value: tag }
     } = event
     if (event.key === 'Enter' && tag.length > 0) {
-      const tagCopy = albumCopy.tags!
+      const tagCopy = [...albumCopy.tags]!
       tagCopy.push(tag)
       setAlbumCopy({ ...albumCopy!, tags: tagCopy })
       tagRef.current!.value = ''
