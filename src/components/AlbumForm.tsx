@@ -80,7 +80,7 @@ const AlbumForm = ({
             </Col>
             <Col lg="4">
               <Form.Label>Price</Form.Label>
-              <Form.Control type="number" name="price" value={price!} />
+              <Form.Control type="number" name="price" value={price!} step="0.01" />
             </Col>
           </Row>
         </Form.Group>
